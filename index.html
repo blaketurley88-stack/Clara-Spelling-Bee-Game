@@ -110,7 +110,7 @@ input::placeholder{color:#a991af}
     <div class="wordlist" id="customWords"></div>
   </details>
   <div class="actions"><button class="btn" id="reviewMissed">Practice missed words</button><button class="btn" id="resetStats">Reset score</button></div>
-  <p id="audioStatus" class="footer" role="status" aria-live="polite">Pronunciations need internet or device text-to-speech support.</p>
+  <p id="audioStatus" class="footer" role="status" aria-live="polite">Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.</p>
   <p class="footer">Tip: Use headphones, say the spelling out loud, and practice a few minutes every day.</p>
 </main>
 <script>
@@ -128,7 +128,7 @@ function updateQuietMode(){
  ['hearCard','hearChallenge','hearSlow'].forEach(id=>$(id).style.display=quietMode?'none':'');
  $('studyCardWord').style.display=quietMode?'':'none';
  $('peekWord').style.display=quietMode?'':'none';
- $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Study a word, hide it, then spell it from memory.':'Pronunciations need internet or device text-to-speech support.';
+ $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Study a word, hide it, then spell it from memory.':'Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.';
  hidePeek();showCard();showChallenge();
 }
 $('quietMode').onchange=e=>{quietMode=e.target.checked;localStorage.setItem('clara-quiet-mode',String(quietMode));if(window.speechSynthesis)window.speechSynthesis.cancel();if(currentAudio)currentAudio.pause();updateQuietMode();};
@@ -141,40 +141,31 @@ function rebuildDeck(){const level=$("levelSelect").value;deck=[...starterWords,
 $("levelSelect").addEventListener("change",rebuildDeck);
 function saveCustom(){localStorage.setItem("spellsprint-custom",JSON.stringify(custom));}
 function updateStats(){$("score").textContent=score;$("streak").textContent=streak;$("remaining").textContent=deck.length;}
-const audioCache = new Map();
+// iOS Safari requires speech to start directly in the tap handler.
+// Do not await a dictionary API call before speaking: that loses the user gesture.
 let currentAudio = null;
 function audioStatus(message){ $("audioStatus").textContent=message; }
-async function speak(word, rate=0.85){
+function speak(word, rate=0.85){
  if(quietMode)return;
-  if(currentAudio){currentAudio.pause();currentAudio=null;}
-  if(window.speechSynthesis) window.speechSynthesis.cancel();
-  audioStatus("Loading pronunciation…");
-  // Try actual recorded pronunciation first. Requires internet access.
-  try {
-    let url=audioCache.get(word.toLowerCase());
-    if(url===undefined){
-      const response=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word),{signal:AbortSignal.timeout(6500)});
-      if(!response.ok)throw new Error("No dictionary recording");
-      const data=await response.json();
-      url=data.flatMap(entry=>entry.phonetics||[]).map(p=>p.audio).find(Boolean)||null;
-      audioCache.set(word.toLowerCase(),url);
-    }
-    if(url){
-      const audio=new Audio(url);currentAudio=audio;audio.playbackRate=rate<0.8?0.75:1;
-      await audio.play();audioStatus("Playing recorded pronunciation");return;
-    }
-  } catch(err) { /* Fall back to speech synthesis. */ }
-  if(!window.speechSynthesis){audioStatus("Audio unavailable. Try opening this file in Chrome with internet access.");return;}
-  try {
-    const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=rate;
-    const voices=speechSynthesis.getVoices();
-    const voice=voices.find(v=>v.lang.toLowerCase()==="en-us")||voices.find(v=>v.lang.toLowerCase().startsWith("en"));
-    if(voice)u.voice=voice;
-    u.onstart=()=>audioStatus("Speaking word…");
-    u.onerror=()=>audioStatus("Audio unavailable. Try Chrome, turn up media volume, and check text-to-speech settings.");
-    speechSynthesis.speak(u);
-    audioStatus("Using device text-to-speech…");
-  }catch(e){audioStatus("Audio unavailable in this browser. Try Chrome.");}
+ if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)){
+   audioStatus('Speech is not supported in this browser. Try Safari on iPhone.');return;
+ }
+ try {
+   if(currentAudio){currentAudio.pause();currentAudio=null;}
+   const synth=window.speechSynthesis;
+   synth.cancel();
+   const utterance=new SpeechSynthesisUtterance(word);
+   utterance.lang='en-US';utterance.rate=rate;utterance.volume=1;
+   const voices=synth.getVoices();
+   const voice=voices.find(v=>v.lang.toLowerCase()==='en-us')||voices.find(v=>v.lang.toLowerCase().startsWith('en'));
+   if(voice)utterance.voice=voice;
+   utterance.onstart=()=>audioStatus('🔊 Speaking word…');
+   utterance.onend=()=>audioStatus('Tap Hear Word to listen again.');
+   utterance.onerror=e=>audioStatus('Speech could not play ('+e.error+'). Check iPhone volume and Silent Mode, then tap again.');
+   // Crucial: call speak synchronously, without fetch or async/await.
+   synth.speak(utterance);
+   audioStatus('🔊 Pronunciation requested. If silent, turn up media volume and try Safari.');
+ }catch(e){audioStatus('Speech unavailable: '+e.message);}
 }
 
 function showCardStudyButton(c){$("studyCardWord").onclick=()=>{$("cardWord").textContent=c.word;$("cardPrompt").textContent="Study the word, then hide it and spell from memory.";$("studyCardWord").textContent="🙈 Hide word";$("studyCardWord").onclick=()=>{$("cardWord").textContent="•".repeat(Math.min(c.word.length,12));$("cardPrompt").textContent="Spell from memory, then reveal to check.";$("studyCardWord").textContent="👀 Show study word";showCardStudyButton(c);};};}
