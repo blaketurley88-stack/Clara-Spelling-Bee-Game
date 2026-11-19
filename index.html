@@ -1,267 +1,139 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clara’s Spell Garden</title>
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#f8c3eb">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Spell Garden">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<style>
-:root{color-scheme:light;--bg:#fff2fa;--panel:#fffaff;--panel2:#fce4f4;--ink:#57325e;--muted:#806b88;--accent:#ad46a3;--accent2:#ffd47e;--bad:#c62e6e;--line:#edc7e5}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 8%,#f8c3eb 0,transparent 32%),radial-gradient(circle at 90% 15%,#dcd3ff 0,transparent 38%),var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
-main{width:min(920px,calc(100% - 28px));margin:34px auto 60px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:22px}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#ff99cf,#c8a4ff);display:grid;place-items:center;color:#702c70;font-size:25px;font-weight:900}
-h1{font-size:clamp(25px,4vw,36px);line-height:1.1;margin:0}.sub{color:var(--muted);margin:5px 0 0;font-size:14px}
-.stats{display:flex;gap:9px;flex-wrap:wrap}.stat{background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:12px;text-align:center;min-width:76px}.stat b{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
-.tabs{display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px;border-radius:15px;margin-bottom:16px}.tab{flex:1;border:0;border-radius:10px;padding:11px;background:transparent;color:var(--muted);font-weight:750;cursor:pointer}.tab.active{background:var(--panel2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.card{background:linear-gradient(160deg,#ffffff,#fff4fc);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 18px 55px #0003}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}.muted{color:var(--muted)}.word{font-size:clamp(34px,7vw,58px);font-weight:850;letter-spacing:.02em;text-align:center;margin:25px 0 12px;overflow-wrap:anywhere}.clue{max-width:620px;margin:12px auto;text-align:center;color:var(--muted);font-size:17px}.sentence{max-width:650px;margin:16px auto;text-align:center;color:#795782;font-style:italic}
-.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:11px 17px;border-radius:12px;font-weight:750;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.primary{background:var(--accent);color:#fff;border-color:transparent}.btn.gold{background:var(--accent2);color:#57325e;border-color:transparent}.btn:disabled{opacity:.45;cursor:not-allowed}
-.progress{height:8px;background:#f2d8eb;border-radius:9px;overflow:hidden;margin:17px 0 5px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#f277bd,#a18bfa);transition:width .25s}
-.counter{font-size:13px;color:var(--muted)}.answer{display:none;border-top:1px solid var(--line);margin-top:20px;padding-top:18px;text-align:center}.answer.show{display:block}.answer .word{font-size:38px;margin:5px}.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}
-.challenge{max-width:660px;margin:auto}.challenge .clue{text-align:left;margin:20px 0 8px}.challenge .sentence{text-align:left;margin:8px 0 18px}.input{width:100%;padding:15px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#57325e;color:var(--ink);font-size:20px;outline:none}.input:focus{border-color:var(--accent)}.feedback{min-height:30px;text-align:center;font-weight:750;margin-top:12px}.feedback.good{color:var(--accent)}.feedback.bad{color:var(--bad)}
-.custom{margin-top:16px}.custom summary{cursor:pointer;font-weight:750;color:var(--accent)}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}.formgrid input{min-width:0}.formgrid .wide{grid-column:1/-1}
-.wordlist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.chip{border:1px solid var(--line);border-radius:99px;padding:5px 9px;color:var(--muted);font-size:12px}
-.hidden{display:none!important}.small{font-size:13px}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
-@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.stats{width:100%}.stat{flex:1}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f9b9df"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Spell Garden"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-192.png"><title>Clara's Spell Garden 🌸</title><style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#653665;background:#fff2fb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#fbd3ed,transparent 45%),radial-gradient(circle at top right,#e6d8ff,transparent 50%),#fff2fb;min-height:100vh}main{max-width:780px;margin:auto;padding:18px 14px 60px}header{text-align:center}h1{font-size:clamp(27px,6vw,43px);margin:8px 0}h2{margin:8px 0 15px}p{line-height:1.5}.sub{margin:0 0 18px;color:#8a668c}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.stat,.panel{background:#fffafd;border:2px solid #f2c9e9;border-radius:20px;box-shadow:0 9px 24px #bb76ad1a}.stat{text-align:center;padding:11px 5px}.stat strong{font-size:25px;display:block;color:#ad4ba4}.stat small{font-size:12px}.panel{padding:clamp(16px,4vw,26px);margin:13px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.buttons{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0}.btn{border:2px solid #ecc1e3;border-radius:14px;background:#fce4f5;color:#713b75;padding:12px 16px;font-weight:800;font-size:15px;cursor:pointer;touch-action:manipulation}.btn.primary{color:white;background:linear-gradient(115deg,#db5cae,#9968dd);border:0}.btn.gold{background:#ffe3a1;border-color:#f8c976}.btn:disabled{opacity:.5;cursor:default}select,input{font:inherit;color:#653665}select{border:2px solid #ecc1e3;border-radius:12px;padding:10px;background:white;max-width:100%}.field{width:100%;font-size:22px;padding:15px;border:2px solid #d9a8d8;border-radius:15px;background:white;outline-color:#b45fb2}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.tabs button{font-size:13px;padding:12px 5px}.tabs .active{background:#b65bac;color:white}.prompt{text-align:center;color:#886489;font-size:17px;margin:17px 0}.bigword{text-align:center;font-size:clamp(30px,7vw,51px);font-weight:900;overflow-wrap:anywhere;color:#a748a6;min-height:60px;margin:18px 0}.feedback{text-align:center;border-radius:18px;padding:17px;margin:16px 0;font-size:20px;font-weight:800}.feedback.good{background:#e2ffe9;color:#28784b}.feedback.bad{background:#fff0d8;color:#985728}.hidden{display:none!important}.progress{height:13px;border-radius:20px;background:#f5d7ee;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,#ff92c4,#a980ff);transition:width .25s}.tag{font-size:12px;color:#97568d;font-weight:800;letter-spacing:.05em;text-transform:uppercase}.hint{text-align:center;font-size:14px;color:#8b688d}.banner{text-align:center;padding:12px;border-radius:15px;background:#fbe0f2;font-weight:700}.badge{display:inline-block;padding:6px 12px;border-radius:50px;background:#ffe5a8;color:#86531b;font-weight:800}.spark{position:fixed;pointer-events:none;font-size:28px;animation:fly 1.15s ease-out forwards;z-index:20}@keyframes fly{to{transform:translate(var(--dx),-160px) rotate(70deg);opacity:0}}@media(prefers-reduced-motion:reduce){.spark{animation:none;display:none}}details summary{font-weight:800;cursor:pointer}.list{font-size:14px;color:#89638c}.footer{text-align:center;color:#947b98;font-size:12px}
 
-/* Clara's pastel garden theme */
-.card{box-shadow:0 18px 50px #c78fbc25}.btn,.tab,.card,.stat{transition:transform .15s ease,box-shadow .15s ease}.btn:active{transform:scale(.97)}
-.btn.primary{background:linear-gradient(120deg,#d85ea9,#a16be2);box-shadow:0 5px 13px #ce78b63a}
-.logo{box-shadow:0 5px 16px #dd8bcf66}.word{color:#9b459b}.stat b{color:#a548a0}
-body:before{content:"✿  ✦  ♡  ✧  ✿";position:fixed;right:14px;top:10px;opacity:.24;letter-spacing:12px;pointer-events:none;font-size:25px}
-input::placeholder{color:#a991af}
-</style>
-</head>
-<body>
-<main>
-  <header class="top">
-    <div class="brand"><div class="logo">✿</div><div><h1>Clara’s Spell Garden ✨</h1><p class="sub">🌸 Little steps, big spelling magic! 🦋</p></div></div>
-    <div class="stats">
-      <div class="stat"><b id="score">0</b><span>Correct</span></div>
-      <div class="stat"><b id="streak">0</b><span>Streak</span></div>
-      <div class="stat"><b id="remaining">20</b><span>In deck</span></div>
-    </div>
-  </header>
-
-  <div class="row" style="margin-bottom:14px"><label for="levelSelect"><strong>Study level</strong></label><select id="levelSelect" class="btn" aria-label="Study level"><option value="One Bee">One Bee</option><option value="Two Bee">Two Bee</option><option value="Three Bee">Three Bee</option><option value="All">All levels</option></select></div>
-  <div class="row" style="margin-bottom:14px;background:#fff0fa;padding:12px;border-radius:14px;border:1px solid #f1c9e6">
-    <label for="quietMode"><strong>🌙 Quiet study mode (no sound)</strong></label>
-    <input type="checkbox" id="quietMode" style="width:24px;height:24px;accent-color:#cf64ad" aria-label="Quiet study mode">
-  </div>
-  <div id="modeNotice" role="status" aria-live="polite" style="margin:-4px 0 14px;padding:13px 15px;border-radius:14px;background:#f8e4f5;border:1px solid #e8a9d9;font-weight:700;color:#73305d">🔊 Audio study: Tap Hear Word to listen.</div>
-  <nav class="tabs" aria-label="Game modes">
-    <button class="tab active" data-mode="cards">Flashcards</button>
-    <button class="tab" data-mode="challenge">Spelling challenge</button>
-  </nav>
-
-  <section id="cards" class="card">
-    <div class="row"><span class="eyebrow">Flashcard practice</span><span class="counter" id="cardCount">Card 1 of 20</span></div>
-    <div class="progress"><div id="cardProgress"></div></div>
-    <div class="clue" id="cardPrompt">Listen to the word, then try to spell it before revealing the answer.</div>
-    <div class="word" id="cardWord">••••••••</div>
-    <div class="clue" id="cardDefinition"></div>
-    <div class="sentence" id="cardSentence"></div>
-    <div class="actions">
-      <button class="btn" id="hearCard">🔊 Hear word</button>
-      <button class="btn" id="studyCardWord" style="display:none">👀 Show study word</button>
-      <button class="btn primary" id="reveal">Reveal spelling</button>
-    </div>
-    <div class="answer" id="cardAnswer">
-      <div class="eyebrow">Correct spelling</div><div class="word" id="revealedWord"></div>
-      <div class="controls">
-        <button class="btn" id="cardMissed">✕ Need practice</button>
-        <button class="btn primary" id="cardKnown">✓ I knew it</button>
-      </div>
-    </div>
-    <div class="actions"><button class="btn" id="prevCard">← Previous</button><button class="btn gold" id="nextCard">Next card →</button><button class="btn" id="shuffle">Shuffle</button></div>
-  </section>
-
-  <section id="challenge" class="card hidden">
-    <div class="row"><span class="eyebrow">Spelling bee round</span><span class="counter" id="challengeCount">Question 1</span></div>
-    <div class="progress"><div id="challengeProgress"></div></div>
-    <div class="challenge">
-      <div class="actions"><button class="btn primary" id="peekWord" style="display:none">👀 Study word (4 seconds)</button></div>
-      <div class="word hidden" id="peekDisplay" style="font-size:clamp(28px,6vw,46px)" aria-live="polite"></div>
-      <div class="actions"><button class="btn primary" id="hearChallenge">🔊 Hear the word</button><button class="btn" id="hearSlow">🐢 Hear slowly</button></div>
-      <p class="clue" id="challengeDefinition"></p>
-      <p class="sentence" id="challengeSentence"></p>
-      <form id="answerForm">
-        <input class="input" id="spellingInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Type the spelling…" aria-label="Your spelling">
-        <div class="actions"><button class="btn primary" type="submit">Check spelling</button><button class="btn" type="button" id="skip">Skip</button></div>
-      </form>
-      <div class="feedback" id="feedback" aria-live="polite"></div>
-      <div class="actions hidden" id="afterAnswer"><button class="btn gold" id="nextQuestion">Next word →</button></div>
-    </div>
-  </section>
-
-  <details class="card custom">
-    <summary>＋ Add your own spelling words</summary>
-    <p class="muted small">Build a study deck from your spelling bee list. Your custom words stay saved in this browser.</p>
-    <form id="addForm" class="formgrid">
-      <input class="input" id="newWord" placeholder="Word (required)" required>
-      <input class="input" id="newDefinition" placeholder="Definition (optional)">
-      <input class="input wide" id="newSentence" placeholder="Example sentence (optional)">
-      <button class="btn primary wide" type="submit">Add word to deck</button>
-    </form>
-    <div class="wordlist" id="customWords"></div>
-  </details>
-  <div class="actions"><button class="btn" id="reviewMissed">Practice missed words</button><button class="btn" id="resetStats">Reset score</button></div>
-  <p id="audioStatus" class="footer" role="status" aria-live="polite">Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.</p>
-  <p class="footer">Tip: Use headphones, say the spelling out loud, and practice a few minutes every day.</p>
-</main>
+.pet-hero{background:linear-gradient(180deg,#ffffffcc,#fff8ffed),url("./magical-garden.png") center 43%/cover;border:2px solid #eeb9df;border-radius:18px;padding:17px;text-align:center}
+.pet-hero .pet-emoji{font-size:72px;display:block;filter:drop-shadow(0 7px 5px #c279aa66);animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-7px) rotate(3deg)}}.pet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:15px}
+.pet-tile{border:2px solid #efd0ed;background:#fff7fc;border-radius:17px;padding:13px 8px;text-align:center;min-width:0}
+.pet-tile.selected{border-color:#a565c8;background:#f4e8ff}.pet-tile .face{font-size:49px;display:block}
+.pet-tile.locked{filter:saturate(.55);background:#f6eff5}.pet-tile b{display:block}.pet-tile small{display:block;color:#85688a;margin:4px 0 8px}
+.pet-tile .btn{font-size:12px;padding:8px 10px}.pet-message{min-height:28px;text-align:center;color:#9853a0;font-weight:750}
+.pet-hero h2{margin:3px 0}.pet-shop{background:#fff1fa;border-radius:16px;padding:12px;margin-top:15px}
+@media(prefers-reduced-motion:reduce){.pet-hero .pet-emoji{animation:none}}
+</style></head><body><main><header><h1>🌸 Clara's Spell Garden ✨</h1><p class="sub">Grow your spelling superpowers, one word at a time! 🦋</p></header>
+<div class="stats"><div class="stat"><strong id="stars">0</strong><small>⭐ Total stars</small></div><div class="stat"><strong id="streak">0</strong><small>🔥 Streak</small></div><div class="stat"><strong id="mastered">0</strong><small>🏆 Mastered</small></div></div>
+<section class="panel"><div class="row"><label for="level"><b>🐝 Study level</b></label><select id="level"><option>One Bee</option><option>Two Bee</option><option>Three Bee</option><option value="All">All levels</option></select></div><div class="row" style="margin-top:14px"><label for="quiet"><b>🌙 Quiet mode</b></label><input id="quiet" type="checkbox" style="width:25px;height:25px;accent-color:#c258aa"></div><p class="hint" id="modeHint">🔊 Listen and type the word!</p><div class="row"><span class="tag" id="levelProgressText">0 mastered</span><span class="badge" id="milestone">🌱 Seedling</span></div><div class="progress" style="margin-top:9px"><div id="masteryBar"></div></div></section>
+<div class="tabs"><button class="btn active" data-tab="challenge">✍️ Spell it!</button><button class="btn" data-tab="cards">🌷 Flashcards</button><button class="btn" data-tab="progress">🏆 Progress</button><button class="btn" data-tab="pets">🧸 Plushies</button></div>
+<section class="panel" id="challenge"><div class="row"><span class="tag">✨ Spelling challenge</span><span id="counter" class="tag"></span></div><div class="progress" style="margin:13px 0"><div id="roundBar"></div></div><div class="prompt" id="instruction"></div><p class="hint" id="buddyCheer"></p><div id="peekDisplay" class="bigword hidden"></div><div class="buttons"><button id="hear" class="btn primary">🔊 Hear word</button><button id="slow" class="btn">🐢 Slowly</button><button id="peek" class="btn gold hidden">👀 Study word (4 seconds)</button></div><form id="answerForm"><input id="answer" class="field" placeholder="Type your spelling here…" autocapitalize="none" autocomplete="off" spellcheck="false" aria-label="Spell the word"><div class="buttons"><button class="btn primary" id="check" type="submit">✨ Check my spelling!</button><button class="btn" type="button" id="skip">Skip for now</button></div></form><div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div><div class="buttons"><button id="next" class="btn gold hidden">Next word ➜</button></div><p class="hint" id="audioStatus"></p></section>
+<section class="panel hidden" id="cards"><div class="row"><span class="tag">🌷 Memory flashcards</span><span id="cardCounter" class="tag"></span></div><p class="prompt">Look, hide, and spell the word from memory!</p><div id="cardWord" class="bigword">🌸</div><div class="buttons"><button id="showCard" class="btn primary">👀 Show word</button><button id="hideCard" class="btn">🙈 Hide word</button><button id="cardHear" class="btn">🔊 Hear word</button></div><div class="buttons"><button id="cardMiss" class="btn">💗 Need practice</button><button id="cardRight" class="btn gold">⭐ I got it!</button></div><div class="buttons"><button id="cardNext" class="btn">Next card ➜</button></div></section>
+<section class="panel hidden" id="pets">
+ <div class="row"><h2>🧸 Clara's Plushie Cottage</h2><span class="badge" id="petWallet">⭐ 0 stars</span></div>
+ <div class="pet-hero"><span class="pet-emoji" id="buddyEmoji">🐰</span><h2 id="buddyName">Your study buddy</h2><p id="buddyAccessory">Choose a friend to study with!</p><div class="buttons"><button class="btn primary" id="cuddlePet">💗 Cuddle</button><button class="btn gold" id="cheerPet">✨ Play</button></div></div>
+ <p class="pet-message" id="petMessage" role="status" aria-live="polite"></p>
+ <p class="hint">Pick your first plushie for free! More friends unlock as you master words. They never get sad if you take a break.</p>
+ <div id="petCollection" class="pet-grid"></div>
+ <div class="pet-shop"><b>🎀 Dress up your study buddy</b><p class="hint">Earn stars by practicing. Accessories stay yours forever!</p><div class="buttons" id="petAccessories"></div></div>
+ </section>
+ <section class="panel hidden" id="progress"><h2>🏆 My Spelling Garden</h2><p id="progressSummary"></p><div id="levelStats"></div><div class="buttons"><button id="practiceMissed" class="btn primary">🌱 Practice tricky words</button><button id="practiceAll" class="btn">🌼 All words</button></div><p class="hint">Progress stays on this device and browser. Clearing site data can erase it.</p></section>
+<details class="panel"><summary>➕ Add a custom spelling word</summary><form id="customForm" style="margin-top:12px"><input id="customWord" class="field" placeholder="New spelling word" required><div class="buttons"><button class="btn primary">Add to my garden 🌷</button></div></form><p class="list" id="customList"></p></details><p class="footer">Made for Clara 💖 • Keep blooming, spelling star!</p></main>
 <script>
-const studyLevels = {"One Bee": ["ran", "rod", "shy", "drink", "mist", "still", "pump", "sharp", "rich", "shoot", "claws", "winter", "yellow", "mouth", "paper", "inside", "whale", "lizard", "nurse", "wind", "good", "bunny", "silly", "stars", "hello", "shell", "easy", "shift", "seal", "crack", "apple", "shine", "spray", "rabbit", "frozen", "market", "beware", "wrong", "leg", "most", "down", "sick", "truck", "bush", "yarn", "body", "heart", "even", "come", "sound", "chips", "year", "feed", "speak", "flock", "sparkle", "hopped", "dirt", "hurt", "steps", "path", "fire", "late", "wings", "house", "tusk", "dive", "fine", "mossy", "beans", "truth", "tallest", "cliffs", "crunch", "sweater", "money", "cabin", "carve", "earth", "half", "fear", "riddle", "illness", "knit", "total", "finish", "spiders", "hospital", "narrow", "foolish", "charming", "beasts", "smoothly", "dangle", "frazzled", "darkness", "shadows", "friend", "swift", "thirsty", "voice", "lead", "cloak", "indoors", "holiday", "entire", "mustard", "medium", "afraid", "source", "shivering", "cottage", "distance", "bamboo", "always", "morning", "lovely", "grandfather", "peer", "peach", "groan", "parade", "trouble", "safety", "library", "company", "pennies", "remember", "pearls", "barge", "humble", "breeze", "sprout", "alive", "return", "footprints", "gentle", "pancake", "sloth", "whistle", "relax", "stout", "guide", "ginger", "hiking", "result", "tangy", "grumpily", "seventy", "soared"], "Two Bee": ["buttons", "clever", "invite", "carefully", "permit", "lunar", "woven", "granola", "laughter", "lounge", "duration", "examine", "tissues", "compromise", "bifocals", "geologist", "atmosphere", "helium", "annoyance", "cuddle", "basement", "butterflies", "sniffling", "awning", "boycotting", "proclaim", "warrior", "salary", "jovial", "dictionary", "versus", "marlin", "incident", "cutlery", "bellowed", "disappointment", "suggested", "interruption", "puffy", "burlap", "kelp", "beneath", "fickle", "molten", "thimble", "rigid", "disappear", "inferior", "business", "lullaby", "Halloween", "Japanese", "chisel", "organism", "truant", "chimpanzees", "concentrate", "tiptoed", "wetlands", "property", "tractor", "relief", "elite", "custody", "fierce", "hurdler", "December", "reinstate", "opposite", "compliment", "investment", "fundraiser", "quail", "pamphlet", "desperate", "piñata", "territory", "monorail", "alphabetical", "prejudice", "cartridge", "fertilizer", "sorceress", "singularity", "battalion", "perimeter", "meticulous", "megahertz", "insurrection", "fascism", "reservoir", "carrion", "elliptical", "cemetery", "stragglers", "exploratory", "integrity", "solidarity", "segregation", "apprentice", "glamorous", "fictitious", "collateral", "precedent", "haddock", "cosmodrome", "regolith", "pheasants", "duende", "matrilineal", "glaucoma", "staccato", "dachshund", "albino", "indigo", "Oregon", "calico", "tortillas", "synthetic", "salamanders", "convertible", "initiation", "materialize", "hypothermia", "arthritis", "pentathlete", "predecessor", "conscious", "piteously", "iridium", "rendezvous", "ridiculous", "bratwurst", "rebuttal", "sputnik", "civilian", "Caesar", "suspension", "snarkiness", "mascara", "magnesium", "optometrist", "schnauzer", "persnickety", "Senegal", "Polaroid", "arnica", "adrenaline", "romerillo", "Aeolus"], "Three Bee": ["newt", "generosity", "wallowing", "mewling", "panoramic", "gauntlets", "appetizing", "prospective", "preconception", "hemisphere", "reluctance", "propeller", "settee", "finesse", "curriculum", "enigmatic", "hypothesis", "thrummed", "burnished", "imperial", "generator", "Doberman", "inanimate", "sentinels", "subscription", "procession", "seminal", "consulate", "modish", "unconscious", "foliage", "quizzically", "increments", "reassurance", "censers", "embankment", "mortar", "persistent", "dominion", "lemmings", "frequency", "blithely", "tenuous", "saxophone", "canter", "cuisine", "influenza", "odorant", "crocheted", "apologetic", "lapels", "unrelenting", "arsonists", "authority", "decisively", "auditory", "self-sufficient", "conspicuous", "perpendicular", "torrential", "sauntered", "juniper", "palazzo", "irrelevant", "diplomatically", "calibrate", "credenza", "comprehensible", "trenchant", "despondent", "echolocation", "conflagration", "thermotaxis", "inaugurate", "bioluminescence", "chickadee", "asymmetric", "sharpei", "endothermy", "éclair", "irascibility", "a cappella", "Amharic", "Gloucester", "prosciutto", "chitinous", "Krio", "Addis Ababa", "protectorate", "pulmonary", "approximation", "glycerin", "alabaster", "arugula", "vibrometer", "mayonnaise", "sputum", "cerulean", "cul-de-sac", "electrolytes", "ototoxic", "Aphrodite", "bogong moth", "yakuza", "sensilla", "eponymous", "Presbyterian", "lactobacillus", "spes phthisica", "Delaware", "undulating", "phantasmal", "brazier", "arachnid", "pathologically", "affinities", "embodiment", "porpoises", "psychological", "assemblage", "leprosy", "eureka", "annelids", "kerosene", "Pennsylvania", "ampulla", "solenodon", "Sierra Leone", "Bildungsroman", "vibrissae", "phenomenon", "alleviate", "legation", "diffidence", "butane", "cataract", "quiche", "euphemism", "acolyte", "innocuous", "Tripoli", "neurological", "mysticetes", "Eritrea", "forsythia", "salicylic acid", "stomatopods", "frankincense", "trichobothria", "Cappadocia"]};
-const starterWords = Object.entries(studyLevels).flatMap(([level,words])=>words.map(word=>({word,level,definition:"",sentence:""})));
-let custom = [];
-try { const stored=JSON.parse(localStorage.getItem("spellsprint-custom") || "[]"); custom=Array.isArray(stored)?stored.filter(x=>x&&typeof x.word==="string").map(x=>({...x,level:x.level||"One Bee"})):[]; } catch {}
-let deck = starterWords.filter(w=>w.level==="One Bee");
-let cardIndex = 0, challengeIndex = 0, score = 0, streak = 0, revealed = false;
-let quietMode = false; try{quietMode=localStorage.getItem('clara-quiet-mode')==='true';}catch{}
-let peekTimer = null;
-function hidePeek(){if(peekTimer)clearTimeout(peekTimer);peekTimer=null;$('peekDisplay').classList.add('hidden');$('peekDisplay').textContent='';}
-function updateQuietMode(){
- $('quietMode').checked=quietMode;
- $('modeNotice').textContent=quietMode?'🌙 Quiet Mode is ON! Flashcards: tap Show study word. Spelling Challenge: tap Study word (4 seconds), then type it.':'🔊 Audio Mode is ON! Tap Hear Word to listen.';
- $('modeNotice').style.background=quietMode?'#f9d9f0':'#f8e4f5';
- ['hearCard','hearChallenge','hearSlow'].forEach(id=>$(id).style.display=quietMode?'none':'');
- $('studyCardWord').style.display=quietMode?'':'none';
- $('peekWord').style.display=quietMode?'':'none';
- $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Use the Show study word button on Flashcards or Study word (4 seconds) in Spelling Challenge.':'Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.';
- hidePeek();
- if(!$("cards").classList.contains("hidden"))showCard();
- else showChallenge();
-}
-let missed = [];
-const $ = id => document.getElementById(id);
-const clean = s => s.trim().toLocaleLowerCase().replace(/[’']/g,"'");
-function rebuildDeck(){const level=$("levelSelect").value;deck=[...starterWords,...custom].filter(w=>level==="All"||w.level===level);cardIndex=0;challengeIndex=0;showCard();showChallenge();updateStats();}
-$("levelSelect").addEventListener("change",rebuildDeck);
-function saveCustom(){try{localStorage.setItem("spellsprint-custom",JSON.stringify(custom));}catch{alert("This browser cannot save custom words right now.");}}
-function updateStats(){$("score").textContent=score;$("streak").textContent=streak;$("remaining").textContent=deck.length;}
-// iOS Safari requires speech to start directly in the tap handler.
-// Do not await a dictionary API call before speaking: that loses the user gesture.
-let currentAudio = null;
-function audioStatus(message){ $("audioStatus").textContent=message; }
-function speak(word, rate=0.85){
- if(quietMode)return;
- if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)){
-   audioStatus('Speech is not supported in this browser. Try Safari on iPhone.');return;
+const studyLevels={"One Bee": ["ran", "rod", "shy", "drink", "mist", "still", "pump", "sharp", "rich", "shoot", "claws", "winter", "yellow", "mouth", "paper", "inside", "whale", "lizard", "nurse", "wind", "good", "bunny", "silly", "stars", "hello", "shell", "easy", "shift", "seal", "crack", "apple", "shine", "spray", "rabbit", "frozen", "market", "beware", "wrong", "leg", "most", "down", "sick", "truck", "bush", "yarn", "body", "heart", "even", "come", "sound", "chips", "year", "feed", "speak", "flock", "sparkle", "hopped", "dirt", "hurt", "steps", "path", "fire", "late", "wings", "house", "tusk", "dive", "fine", "mossy", "beans", "truth", "tallest", "cliffs", "crunch", "sweater", "money", "cabin", "carve", "earth", "half", "fear", "riddle", "illness", "knit", "total", "finish", "spiders", "hospital", "narrow", "foolish", "charming", "beasts", "smoothly", "dangle", "frazzled", "darkness", "shadows", "friend", "swift", "thirsty", "voice", "lead", "cloak", "indoors", "holiday", "entire", "mustard", "medium", "afraid", "source", "shivering", "cottage", "distance", "bamboo", "always", "morning", "lovely", "grandfather", "peer", "peach", "groan", "parade", "trouble", "safety", "library", "company", "pennies", "remember", "pearls", "barge", "humble", "breeze", "sprout", "alive", "return", "footprints", "gentle", "pancake", "sloth", "whistle", "relax", "stout", "guide", "ginger", "hiking", "result", "tangy", "grumpily", "seventy", "soared"], "Two Bee": ["buttons", "clever", "invite", "carefully", "permit", "lunar", "woven", "granola", "laughter", "lounge", "duration", "examine", "tissues", "compromise", "bifocals", "geologist", "atmosphere", "helium", "annoyance", "cuddle", "basement", "butterflies", "sniffling", "awning", "boycotting", "proclaim", "warrior", "salary", "jovial", "dictionary", "versus", "marlin", "incident", "cutlery", "bellowed", "disappointment", "suggested", "interruption", "puffy", "burlap", "kelp", "beneath", "fickle", "molten", "thimble", "rigid", "disappear", "inferior", "business", "lullaby", "Halloween", "Japanese", "chisel", "organism", "truant", "chimpanzees", "concentrate", "tiptoed", "wetlands", "property", "tractor", "relief", "elite", "custody", "fierce", "hurdler", "December", "reinstate", "opposite", "compliment", "investment", "fundraiser", "quail", "pamphlet", "desperate", "piñata", "territory", "monorail", "alphabetical", "prejudice", "cartridge", "fertilizer", "sorceress", "singularity", "battalion", "perimeter", "meticulous", "megahertz", "insurrection", "fascism", "reservoir", "carrion", "elliptical", "cemetery", "stragglers", "exploratory", "integrity", "solidarity", "segregation", "apprentice", "glamorous", "fictitious", "collateral", "precedent", "haddock", "cosmodrome", "regolith", "pheasants", "duende", "matrilineal", "glaucoma", "staccato", "dachshund", "albino", "indigo", "Oregon", "calico", "tortillas", "synthetic", "salamanders", "convertible", "initiation", "materialize", "hypothermia", "arthritis", "pentathlete", "predecessor", "conscious", "piteously", "iridium", "rendezvous", "ridiculous", "bratwurst", "rebuttal", "sputnik", "civilian", "Caesar", "suspension", "snarkiness", "mascara", "magnesium", "optometrist", "schnauzer", "persnickety", "Senegal", "Polaroid", "arnica", "adrenaline", "romerillo", "Aeolus"], "Three Bee": ["newt", "generosity", "wallowing", "mewling", "panoramic", "gauntlets", "appetizing", "prospective", "preconception", "hemisphere", "reluctance", "propeller", "settee", "finesse", "curriculum", "enigmatic", "hypothesis", "thrummed", "burnished", "imperial", "generator", "Doberman", "inanimate", "sentinels", "subscription", "procession", "seminal", "consulate", "modish", "unconscious", "foliage", "quizzically", "increments", "reassurance", "censers", "embankment", "mortar", "persistent", "dominion", "lemmings", "frequency", "blithely", "tenuous", "saxophone", "canter", "cuisine", "influenza", "odorant", "crocheted", "apologetic", "lapels", "unrelenting", "arsonists", "authority", "decisively", "auditory", "self-sufficient", "conspicuous", "perpendicular", "torrential", "sauntered", "juniper", "palazzo", "irrelevant", "diplomatically", "calibrate", "credenza", "comprehensible", "trenchant", "despondent", "echolocation", "conflagration", "thermotaxis", "inaugurate", "bioluminescence", "chickadee", "asymmetric", "sharpei", "endothermy", "éclair", "irascibility", "a cappella", "Amharic", "Gloucester", "prosciutto", "chitinous", "Krio", "Addis Ababa", "protectorate", "pulmonary", "approximation", "glycerin", "alabaster", "arugula", "vibrometer", "mayonnaise", "sputum", "cerulean", "cul-de-sac", "electrolytes", "ototoxic", "Aphrodite", "bogong moth", "yakuza", "sensilla", "eponymous", "Presbyterian", "lactobacillus", "spes phthisica", "Delaware", "undulating", "phantasmal", "brazier", "arachnid", "pathologically", "affinities", "embodiment", "porpoises", "psychological", "assemblage", "leprosy", "eureka", "annelids", "kerosene", "Pennsylvania", "ampulla", "solenodon", "Sierra Leone", "Bildungsroman", "vibrissae", "phenomenon", "alleviate", "legation", "diffidence", "butane", "cataract", "quiche", "euphemism", "acolyte", "innocuous", "Tripoli", "neurological", "mysticetes", "Eritrea", "forsythia", "salicylic acid", "stomatopods", "frankincense", "trichobothria", "Cappadocia"]};
+const $=id=>document.getElementById(id);
+const STORE='clara-spell-garden-fun-v1';
+const defaultState=()=>({stars:0,streak:0,best:0,attempts:{},quiet:false,level:'One Bee',custom:[],round:0});
+let state=defaultState();try{const s=JSON.parse(localStorage.getItem(STORE)||'null');if(s&&typeof s==='object')state={...state,...s,attempts:s.attempts||{},custom:Array.isArray(s.custom)?s.custom:[]};}catch{}
+// Bring forward old custom word lists and quiet preference when upgrading.
+try{if(!state.custom.length){const old=JSON.parse(localStorage.getItem('spellsprint-custom')||'[]');if(Array.isArray(old))state.custom=old.filter(x=>x&&typeof x.word==='string').map(x=>({word:x.word,level:x.level||'One Bee'}));}if(localStorage.getItem('clara-quiet-mode')==='true')state.quiet=true;}catch{}
+const PETS=[
+{id:'bunny',emoji:'🐰',name:'Bunny',need:0},
+{id:'kitten',emoji:'🐱',name:'Kitten',need:0},
+{id:'puppy',emoji:'🐶',name:'Puppy',need:0},
+{id:'bear',emoji:'🧸',name:'Teddy Bear',need:0},
+{id:'fox',emoji:'🦊',name:'Fox',need:10},
+{id:'panda',emoji:'🐼',name:'Panda',need:20},
+{id:'unicorn',emoji:'🦄',name:'Unicorn',need:35},
+{id:'dragon',emoji:'🐲',name:'Baby Dragon',need:50},
+{id:'koala',emoji:'🐨',name:'Koala',need:75},
+{id:'penguin',emoji:'🐧',name:'Penguin',need:100},
+{id:'frog',emoji:'🐸',name:'Frog',need:150},
+{id:'sloth',emoji:'🦥',name:'Sloth',need:200}
+];
+const ACCESSORIES=[{id:'bow',emoji:'🎀',name:'Pink bow',cost:30},{id:'crown',emoji:'👑',name:'Crown',cost:80},{id:'flower',emoji:'🌺',name:'Flower',cost:50},{id:'sparkles',emoji:'✨',name:'Sparkles',cost:100}];
+if(!state.pets||typeof state.pets!=='object')state.pets={chosen:null,adopted:[],names:{},owned:[],wearing:null};
+const petState=state.pets;
+petState.adopted=Array.isArray(petState.adopted)?petState.adopted:[];
+petState.owned=Array.isArray(petState.owned)?petState.owned:[];
+petState.names=petState.names&&typeof petState.names==='object'?petState.names:{};
+const masteredCount=()=>allWords().filter(isMastered).length;
+function petMessage(message){$('petMessage').textContent=message;}
+function activePet(){return PETS.find(p=>p.id===petState.chosen&&petState.adopted.includes(p.id));}
+function petDisplayName(p){return petState.names[p.id]||p.name;}
+function petUnlocked(p){return masteredCount()>=p.need;}
+function renderPets(){
+ const current=activePet();$('petWallet').textContent='⭐ '+state.stars+' stars';
+ $('buddyEmoji').textContent=current?current.emoji:'🎁';
+ $('buddyName').textContent=current?petDisplayName(current):'Choose your first plushie!';
+ const accessory=ACCESSORIES.find(a=>a.id===petState.wearing);
+ $('buddyAccessory').textContent=current?(accessory?'Wearing '+accessory.emoji+' '+accessory.name:'Your cuddly spelling buddy!'):'Your first plushie is free 💕';
+ $('cuddlePet').disabled=!current;$('cheerPet').disabled=!current;
+ const collection=$('petCollection');collection.replaceChildren();
+ for(const p of PETS){
+  const owned=petState.adopted.includes(p.id),unlocked=petUnlocked(p);
+  const tile=document.createElement('div');tile.className='pet-tile'+(petState.chosen===p.id?' selected':'')+(!unlocked?' locked':'');
+  const face=document.createElement('span');face.className='face';face.textContent=unlocked?p.emoji:'🔒';tile.append(face);
+  const name=document.createElement('b');name.textContent=owned?petDisplayName(p):p.name;tile.append(name);
+  const status=document.createElement('small');status.textContent=owned?(petState.chosen===p.id?'💖 Study buddy':'Adopted'):(unlocked?'Ready to adopt!':'Master '+p.need+' words to unlock');tile.append(status);
+  const button=document.createElement('button');button.className='btn'+(petState.chosen===p.id?' gold':' primary');
+  button.textContent=owned?(petState.chosen===p.id?'✏️ Rename':'💗 Choose buddy'):'🎁 Adopt';
+  button.disabled=!unlocked;
+  button.onclick=()=>{
+   if(!owned){petState.adopted.push(p.id);petState.chosen=p.id;petMessage('🎉 You adopted a new plushie! Give your friend a name!');}
+   else if(petState.chosen===p.id){const value=prompt('What would you like to name your plushie?',petDisplayName(p));if(value===null)return;const newName=value.trim().slice(0,24);if(newName)petState.names[p.id]=newName;}
+   else {petState.chosen=p.id;petMessage('💖 '+petDisplayName(p)+' is your study buddy!');}
+   save();renderPets();
+  };
+  tile.append(button);collection.append(tile);
  }
- try {
-   if(currentAudio){currentAudio.pause();currentAudio=null;}
-   const synth=window.speechSynthesis;
-   synth.cancel();
-   const utterance=new SpeechSynthesisUtterance(word);
-   utterance.lang='en-US';utterance.rate=rate;utterance.volume=1;
-   const voices=synth.getVoices();
-   const voice=voices.find(v=>v.lang.toLowerCase()==='en-us')||voices.find(v=>v.lang.toLowerCase().startsWith('en'));
-   if(voice)utterance.voice=voice;
-   utterance.onstart=()=>audioStatus('🔊 Speaking word…');
-   utterance.onend=()=>audioStatus('Tap Hear Word to listen again.');
-   utterance.onerror=e=>audioStatus('Speech could not play ('+e.error+'). Check iPhone volume and Silent Mode, then tap again.');
-   // Crucial: call speak synchronously, without fetch or async/await.
-   synth.speak(utterance);
-   audioStatus('🔊 Pronunciation requested. If silent, turn up media volume and try Safari.');
- }catch(e){audioStatus('Speech unavailable: '+e.message);}
+ const shop=$('petAccessories');shop.replaceChildren();
+ for(const a of ACCESSORIES){
+  const owned=petState.owned.includes(a.id),wearing=petState.wearing===a.id;
+  const b=document.createElement('button');b.className='btn'+(wearing?' gold':'');b.disabled=!current||(!owned&&state.stars<a.cost);
+  b.textContent=a.emoji+' '+a.name+' · '+(wearing?'Wearing':owned?'Wear':a.cost+' ⭐');
+  b.onclick=()=>{
+   if(!petState.owned.includes(a.id)){if(state.stars<a.cost)return;state.stars-=a.cost;petState.owned.push(a.id);}
+   petState.wearing=wearing?null:a.id;save();progress();renderPets();
+   petMessage('✨ Looking adorable!');
+  };
+  shop.append(b);
+ }
 }
-
-let cardStudyVisible=false;
-function toggleCardStudy(){
- const c=deck[cardIndex];
- cardStudyVisible=!cardStudyVisible;
- $("cardWord").textContent=cardStudyVisible?c.word:"•".repeat(Math.min(c.word.length,12));
- $("studyCardWord").textContent=cardStudyVisible?"🙈 Hide word":"👀 Show study word";
- $("cardPrompt").textContent=cardStudyVisible?"Memorize the spelling, then hide it.":"Spell the word from memory, then reveal to check.";
-}
-function showCard(){
- if(!deck.length)return;
- cardIndex=(cardIndex+deck.length)%deck.length;const c=deck[cardIndex];revealed=false;
- cardStudyVisible=false;
- $("studyCardWord").textContent="👀 Show study word";
- $("cardCount").textContent=`Card ${cardIndex+1} of ${deck.length}`;
- $("cardProgress").style.width=`${(cardIndex+1)/deck.length*100}%`;
- $("cardPrompt").textContent=quietMode?"Tap Show study word, memorize it, then hide it and spell from memory.":"Listen to the word. Try spelling it before you reveal the answer.";
- $("cardWord").textContent="•".repeat(Math.min(c.word.length,12));
- $("cardDefinition").textContent=c.definition||(quietMode?"Silent visual memory practice":"Listen to the pronunciation and spell the word.");
- $("cardSentence").textContent=c.sentence||"";
- $("cardAnswer").classList.remove("show");$("reveal").disabled=false;
-}
-function showChallenge(){
- if(!deck.length)return;
- hidePeek();challengeIndex=(challengeIndex+deck.length)%deck.length;const c=deck[challengeIndex];
- $("challengeCount").textContent=`Question ${challengeIndex+1} of ${deck.length}`;
- $("challengeProgress").style.width=`${challengeIndex/deck.length*100}%`;
- $("challengeDefinition").textContent=c.definition||(quietMode?"Tap Study word to see it for 4 seconds, then type it from memory.":"Listen carefully and type the spelling you hear.");
- $("challengeSentence").textContent=c.sentence||"";
- $("spellingInput").value="";$("spellingInput").disabled=false;$("skip").disabled=false;$("feedback").textContent="";$("feedback").className="feedback";
- $("afterAnswer").classList.add("hidden");if(!$("challenge").classList.contains("hidden"))$("spellingInput").focus();
-}
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
- $("cards").classList.toggle("hidden",b.dataset.mode!=="cards");
- $("challenge").classList.toggle("hidden",b.dataset.mode!=="challenge");
- if(b.dataset.mode==="challenge")showChallenge();
-}));
-$("hearCard").onclick=()=>speak(deck[cardIndex].word);
-$("reveal").onclick=()=>{const c=deck[cardIndex];$("revealedWord").textContent=c.word;$("cardWord").textContent=c.word;$("cardAnswer").classList.add("show");$("reveal").disabled=true;if(!quietMode)speak(c.word);};
-$("prevCard").onclick=()=>{cardIndex--;showCard();};
-$("nextCard").onclick=()=>{cardIndex++;showCard();};
-$("shuffle").onclick=()=>{for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}cardIndex=0;showCard();};
-function rateCard(known){if(known){score++;streak++;}else{streak=0;if(!missed.includes(deck[cardIndex].word))missed.push(deck[cardIndex].word);}updateStats();cardIndex++;showCard();}
-$("cardKnown").onclick=()=>rateCard(true);$("cardMissed").onclick=()=>rateCard(false);
-$("hearChallenge").onclick=()=>speak(deck[challengeIndex].word);
-$("hearSlow").onclick=()=>speak(deck[challengeIndex].word,.65);
-function finishChallenge(correct,skipped=false){
- if($("spellingInput").disabled)return;
- hidePeek();
- const c=deck[challengeIndex],f=$("feedback");
- if(correct){score++;streak++;f.textContent="✓ Correct! Great spelling.";f.className="feedback good";}
- else{streak=0;if(!missed.includes(c.word))missed.push(c.word);f.textContent=(skipped?"Skipped. ":"Not quite. ")+"Correct spelling: "+c.word;f.className="feedback bad";}
- updateStats();$("spellingInput").disabled=true;$("skip").disabled=true;$("afterAnswer").classList.remove("hidden");
-}
-$("answerForm").onsubmit=e=>{e.preventDefault();if($("spellingInput").disabled)return;const target=deck[challengeIndex].word;const alternatives={"fertilizer":["fertiliser"],"materialize":["materialise"],"odorant":["odourant"],"glycerin":["glycerine"],"brazier":["brasier"],"kerosene":["kerosine"]};const correct=[target,...(alternatives[target]||[])].some(w=>clean($("spellingInput").value)===clean(w));finishChallenge(correct);};
-$("skip").onclick=()=>finishChallenge(false,true);
-$("nextQuestion").onclick=()=>{challengeIndex++;if(challengeIndex>=deck.length){challengeIndex=0;}showChallenge();};
-$("addForm").onsubmit=e=>{
- e.preventDefault();const word=$("newWord").value.trim();if(!word)return;
- if([...starterWords,...custom].some(x=>clean(x.word)===clean(word))){alert("That word is already in your deck.");return;}
- const item={word,definition:$("newDefinition").value.trim(),sentence:$("newSentence").value.trim()};
- item.level=$("levelSelect").value==="All"?"One Bee":$("levelSelect").value;custom.push(item);saveCustom();rebuildDeck();$("newWord").value="";$("newDefinition").value="";$("newSentence").value="";
- renderCustom();updateStats();showCard();
-};
-function renderCustom(){
- $("customWords").innerHTML="";
- custom.forEach((c,i)=>{const chip=document.createElement("span");chip.className="chip";chip.textContent=c.word+" ×";chip.title="Remove custom word";
- chip.style.cursor="pointer";chip.onclick=()=>{custom.splice(i,1);saveCustom();renderCustom();rebuildDeck();};$("customWords").append(chip);});
-}
-$("reviewMissed").onclick=()=>{
- if(!missed.length){alert("No missed words yet. Try a challenge round first!");return;}
- const words=missed.map(w=>[...starterWords,...custom].find(c=>c.word===w)).filter(Boolean);if(!words.length)return;
- deck=words;cardIndex=0;challengeIndex=0;showCard();updateStats();document.querySelector('[data-mode="cards"]').click();
-};
-$("resetStats").onclick=()=>{score=0;streak=0;missed=[];updateStats();};
-$("quietMode").addEventListener("change", e=>{
- quietMode=e.target.checked;
- try{localStorage.setItem("clara-quiet-mode",String(quietMode));}catch{}
- if(window.speechSynthesis)window.speechSynthesis.cancel();
- if(currentAudio){currentAudio.pause();currentAudio=null;}
- updateQuietMode();
-});
-$("peekWord").addEventListener("click",()=>{
- if(!quietMode)return;
- hidePeek();
- $("peekDisplay").textContent=deck[challengeIndex].word;
- $("peekDisplay").classList.remove("hidden");
- peekTimer=setTimeout(hidePeek,4000);
-});
-$("studyCardWord").addEventListener("click",toggleCardStudy);
-renderCustom();showCard();updateStats();updateQuietMode();
-</script>
-<script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
-</body>
-</html>
+$('cuddlePet').onclick=()=>{const p=activePet();if(!p)return;petMessage('💗 '+petDisplayName(p)+' loves your cuddles!');};
+$('cheerPet').onclick=()=>{const p=activePet();if(!p)return;petMessage('✨ '+petDisplayName(p)+' does a happy dance!');confetti();};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state));}catch{}};
+const allWords=()=>Object.entries(studyLevels).flatMap(([level,words])=>words.map(word=>({word,level}))).concat(state.custom);
+const key=w=>w.level+'|'+w.word.toLocaleLowerCase();
+const stats=w=>state.attempts[key(w)]||{right:0,wrong:0,run:0};
+const isMastered=w=>stats(w).run>=3;
+const normalize=s=>s.trim().toLocaleLowerCase().normalize('NFC').replace(/[’]/g,"'").replace(/\s+/g,' ');
+let deck=[],index=0,cardIndex=0,answered=false,peekTimer=null,tab='challenge',reviewOnly=false;
+function refreshDeck(){const all=allWords().filter(w=>state.level==='All'||w.level===state.level);deck=reviewOnly?all.filter(w=>stats(w).wrong>0&&!isMastered(w)):all;if(!deck.length&&reviewOnly){reviewOnly=false;deck=all;}index=0;cardIndex=0;showQuestion();showCard();updateDashboard();}
+function progress(){const all=allWords(),mastered=all.filter(isMastered).length;const scoped=all.filter(w=>state.level==='All'||w.level===state.level);const scopedMastered=scoped.filter(isMastered).length;$('stars').textContent=state.stars;$('streak').textContent=state.streak;$('mastered').textContent=mastered;$('masteryBar').style.width=(scoped.length?100*scopedMastered/scoped.length:0)+'%';$('levelProgressText').textContent=`${scopedMastered} of ${scoped.length} mastered`;$('milestone').textContent=state.streak>=10?'👑 Superstar':state.streak>=5?'🌺 Blooming':state.streak>=3?'🌷 Growing':'🌱 Seedling';}
+function cancelPeek(){clearTimeout(peekTimer);peekTimer=null;$('peekDisplay').classList.add('hidden');$('peekDisplay').textContent='';}
+function showQuestion(){cancelPeek();answered=false;const w=deck[index];if(!w){$('instruction').textContent='Add some words to begin!';return;}$('counter').textContent=`Word ${index+1} of ${deck.length}`;$('roundBar').style.width=(100*index/deck.length)+'%';$('instruction').textContent=state.quiet?'🌙 Tap Study word, memorize it, then type it!':'🔊 Tap Hear word, listen, then type the spelling!';$('answer').value='';$('answer').disabled=false;$('check').disabled=false;$('skip').disabled=false;$('feedback').className='feedback hidden';$('next').classList.add('hidden');$('audioStatus').textContent='';$('buddyCheer').textContent=activePet()?activePet().emoji+' '+petDisplayName(activePet())+' is cheering for you!':'';}
+function showCard(){if(!deck.length)return;cardIndex%=deck.length;$('cardCounter').textContent=`Card ${cardIndex+1} of ${deck.length}`;$('cardWord').textContent='🌸';}
+function switchTab(name){tab=name;for(const b of document.querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab===name);for(const n of ['challenge','cards','progress','pets'])$(n).classList.toggle('hidden',n!==name);if(name==='progress')updateDashboard();if(name==='pets')renderPets();}
+function updateMode(){state.quiet=$('quiet').checked;save();cancelPeek();for(const id of ['hear','slow','cardHear'])$(id).classList.toggle('hidden',state.quiet);$('peek').classList.toggle('hidden',!state.quiet);$('modeHint').textContent=state.quiet?'🌙 Quiet mode: study a word, hide it, then type!':'🔊 Audio mode: hear a word and spell it!';if(state.quiet&&'speechSynthesis'in window)speechSynthesis.cancel();showQuestion();progress();}
+let lastUtterance=null;
+function speak(word,rate=.85){if(state.quiet)return;if(!('speechSynthesis'in window)){$('audioStatus').textContent='Audio is unavailable in this browser. Try Safari or Chrome.';return;}try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);lastUtterance=u;u.lang='en-US';u.rate=rate;u.volume=1;u.onerror=()=>{$('audioStatus').textContent='Could not play audio. Try raising media volume or use Quiet Mode.'};speechSynthesis.speak(u);$('audioStatus').textContent='🔊 Playing pronunciation…';}catch{$('audioStatus').textContent='Audio unavailable. Quiet Mode works without sound.';}}
+function confetti(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const glyphs=['🌸','⭐','✨','🦋','💖','🌷'];for(let i=0;i<12;i++){const s=document.createElement('span');s.className='spark';s.textContent=glyphs[i%glyphs.length];s.style.left=(10+Math.random()*80)+'vw';s.style.top=(65+Math.random()*25)+'vh';s.style.setProperty('--dx',(Math.random()*220-110)+'px');document.body.append(s);setTimeout(()=>s.remove(),1300);}}
+const cheers=['🌸 You nailed it, Clara!','✨ Magical spelling!','🦋 Wow! You are blooming!','🌟 Superstar spelling!','💖 You did it! Keep shining!','🌷 Beautiful work!'];
+const comforts=['💗 Great try! Every mistake helps you grow.','🌱 Keep practicing — you are getting stronger!','🦋 Almost there! You can do this!','🌸 No worries! Let’s learn this one together.'];
+function record(w,right){const k=key(w),s=stats(w);s.right+=right?1:0;s.wrong+=right?0:1;s.run=right?s.run+1:0;state.attempts[k]=s;if(right){state.streak++;state.best=Math.max(state.best,state.streak);state.stars+=10+(state.streak%5===0?20:0);}else state.streak=0;save();progress();renderPets();}
+function grade(right,skipped=false){if(answered)return;answered=true;cancelPeek();const w=deck[index];record(w,right);$('answer').disabled=true;$('check').disabled=true;$('skip').disabled=true;const f=$('feedback');f.className='feedback '+(right?'good':'bad');if(right){const msg=cheers[Math.floor(Math.random()*cheers.length)];f.textContent=msg+' ⭐ +'+(state.streak%5===0?30:10)+' stars'+(state.streak>=2?' • 🔥 '+state.streak+' in a row!':'');confetti();const p=activePet();if(p)$('buddyCheer').textContent=p.emoji+' '+petDisplayName(p)+' says: You are amazing! 💕';}else{const p=activePet();if(p)$('buddyCheer').textContent=p.emoji+' '+petDisplayName(p)+' says: You can do it! 🌷';const msg=comforts[Math.floor(Math.random()*comforts.length)];f.textContent=(skipped?'🌷 Let’s learn it! ':msg+' ')+'Correct spelling: '+w.word;}$('next').classList.remove('hidden');updateDashboard();}
+$('answerForm').addEventListener('submit',e=>{e.preventDefault();if(!answered&&$('answer').value.trim())grade(normalize($('answer').value)===normalize(deck[index].word));});
+$('skip').onclick=()=>grade(false,true);
+$('next').onclick=()=>{index=(index+1)%deck.length;if(index===0){state.round++;save();}showQuestion();};
+$('hear').onclick=()=>speak(deck[index].word);$('slow').onclick=()=>speak(deck[index].word,.62);
+$('peek').onclick=()=>{if(answered)return;cancelPeek();$('peekDisplay').textContent=deck[index].word;$('peekDisplay').classList.remove('hidden');$('peek').disabled=true;peekTimer=setTimeout(()=>{cancelPeek();$('peek').disabled=false;$('answer').focus();},4000);};
+$('showCard').onclick=()=>{$('cardWord').textContent=deck[cardIndex].word;};$('hideCard').onclick=()=>{$('cardWord').textContent='🌸';};$('cardHear').onclick=()=>speak(deck[cardIndex].word);
+function gradeCard(right){record(deck[cardIndex],right);if(right)confetti();cardIndex=(cardIndex+1)%deck.length;showCard();updateDashboard();}
+$('cardRight').onclick=()=>gradeCard(true);$('cardMiss').onclick=()=>gradeCard(false);$('cardNext').onclick=()=>{cardIndex=(cardIndex+1)%deck.length;showCard();};
+function updateDashboard(){const all=allWords(),total=all.filter(isMastered).length;$('progressSummary').textContent=`⭐ ${state.stars} stars earned • 🔥 Best streak: ${state.best} • 🏆 ${total} of ${all.length} words mastered (3 correct in a row).`;const el=$('levelStats');el.textContent='';for(const level of Object.keys(studyLevels)){const words=all.filter(w=>w.level===level);const p=document.createElement('p');p.textContent=`🐝 ${level}: ${words.filter(isMastered).length} / ${words.length} mastered`;el.append(p);}const missed=all.filter(w=>stats(w).wrong>0&&!isMastered(w)).length;$('practiceMissed').textContent=`🌱 Practice tricky words (${missed})`;$('practiceMissed').disabled=!missed;}
+$('practiceMissed').onclick=()=>{reviewOnly=true;refreshDeck();switchTab('challenge');};$('practiceAll').onclick=()=>{reviewOnly=false;refreshDeck();switchTab('challenge');};
+$('level').onchange=()=>{state.level=$('level').value;save();reviewOnly=false;refreshDeck();};$('quiet').onchange=updateMode;
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+$('customForm').onsubmit=e=>{e.preventDefault();const word=$('customWord').value.trim();if(!word)return;if(allWords().some(w=>normalize(w.word)===normalize(word)&&w.level===state.level)){alert('That word is already in this level.');return;}const level=state.level==='All'?'One Bee':state.level;state.custom.push({word,level});save();$('customWord').value='';renderCustom();reviewOnly=false;refreshDeck();};
+function renderCustom(){$('customList').textContent=state.custom.length?'Your custom words: '+state.custom.map(w=>w.word).join(', '):'No custom words added yet.';}
+$('level').value=['One Bee','Two Bee','Three Bee','All'].includes(state.level)?state.level:'One Bee';$('quiet').checked=state.quiet;updateMode();refreshDeck();renderCustom();renderPets();switchTab('challenge');
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
