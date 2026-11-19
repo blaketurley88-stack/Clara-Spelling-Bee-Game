@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clara’s Spell Garden</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#f8c3eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Spell Garden">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+:root{color-scheme:light;--bg:#fff2fa;--panel:#fffaff;--panel2:#fce4f4;--ink:#57325e;--muted:#806b88;--accent:#ad46a3;--accent2:#ffd47e;--bad:#c62e6e;--line:#edc7e5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 8%,#f8c3eb 0,transparent 32%),radial-gradient(circle at 90% 15%,#dcd3ff 0,transparent 38%),var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+main{width:min(920px,calc(100% - 28px));margin:34px auto 60px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:22px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#ff99cf,#c8a4ff);display:grid;place-items:center;color:#702c70;font-size:25px;font-weight:900}
+h1{font-size:clamp(25px,4vw,36px);line-height:1.1;margin:0}.sub{color:var(--muted);margin:5px 0 0;font-size:14px}
+.stats{display:flex;gap:9px;flex-wrap:wrap}.stat{background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:12px;text-align:center;min-width:76px}.stat b{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.tabs{display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);padding:6px;border-radius:15px;margin-bottom:16px}.tab{flex:1;border:0;border-radius:10px;padding:11px;background:transparent;color:var(--muted);font-weight:750;cursor:pointer}.tab.active{background:var(--panel2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.card{background:linear-gradient(160deg,#ffffff,#fff4fc);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 18px 55px #0003}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}.muted{color:var(--muted)}.word{font-size:clamp(34px,7vw,58px);font-weight:850;letter-spacing:.02em;text-align:center;margin:25px 0 12px;overflow-wrap:anywhere}.clue{max-width:620px;margin:12px auto;text-align:center;color:var(--muted);font-size:17px}.sentence{max-width:650px;margin:16px auto;text-align:center;color:#795782;font-style:italic}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:11px 17px;border-radius:12px;font-weight:750;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.primary{background:var(--accent);color:#fff;border-color:transparent}.btn.gold{background:var(--accent2);color:#57325e;border-color:transparent}.btn:disabled{opacity:.45;cursor:not-allowed}
+.progress{height:8px;background:#f2d8eb;border-radius:9px;overflow:hidden;margin:17px 0 5px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#f277bd,#a18bfa);transition:width .25s}
+.counter{font-size:13px;color:var(--muted)}.answer{display:none;border-top:1px solid var(--line);margin-top:20px;padding-top:18px;text-align:center}.answer.show{display:block}.answer .word{font-size:38px;margin:5px}.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}
+.challenge{max-width:660px;margin:auto}.challenge .clue{text-align:left;margin:20px 0 8px}.challenge .sentence{text-align:left;margin:8px 0 18px}.input{width:100%;padding:15px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#57325e;color:var(--ink);font-size:20px;outline:none}.input:focus{border-color:var(--accent)}.feedback{min-height:30px;text-align:center;font-weight:750;margin-top:12px}.feedback.good{color:var(--accent)}.feedback.bad{color:var(--bad)}
+.custom{margin-top:16px}.custom summary{cursor:pointer;font-weight:750;color:var(--accent)}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}.formgrid input{min-width:0}.formgrid .wide{grid-column:1/-1}
+.wordlist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.chip{border:1px solid var(--line);border-radius:99px;padding:5px 9px;color:var(--muted);font-size:12px}
+.hidden{display:none!important}.small{font-size:13px}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.stats{width:100%}.stat{flex:1}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+
+/* Clara's pastel garden theme */
+.card{box-shadow:0 18px 50px #c78fbc25}.btn,.tab,.card,.stat{transition:transform .15s ease,box-shadow .15s ease}.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(120deg,#d85ea9,#a16be2);box-shadow:0 5px 13px #ce78b63a}
+.logo{box-shadow:0 5px 16px #dd8bcf66}.word{color:#9b459b}.stat b{color:#a548a0}
+body:before{content:"✿  ✦  ♡  ✧  ✿";position:fixed;right:14px;top:10px;opacity:.24;letter-spacing:12px;pointer-events:none;font-size:25px}
+input::placeholder{color:#a991af}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="brand"><div class="logo">✿</div><div><h1>Clara’s Spell Garden ✨</h1><p class="sub">🌸 Little steps, big spelling magic! 🦋</p></div></div>
+    <div class="stats">
+      <div class="stat"><b id="score">0</b><span>Correct</span></div>
+      <div class="stat"><b id="streak">0</b><span>Streak</span></div>
+      <div class="stat"><b id="remaining">20</b><span>In deck</span></div>
+    </div>
+  </header>
+
+  <div class="row" style="margin-bottom:14px"><label for="levelSelect"><strong>Study level</strong></label><select id="levelSelect" class="btn" aria-label="Study level"><option value="One Bee">One Bee</option><option value="Two Bee">Two Bee</option><option value="Three Bee">Three Bee</option><option value="All">All levels</option></select></div>
+  <nav class="tabs" aria-label="Game modes">
+    <button class="tab active" data-mode="cards">Flashcards</button>
+    <button class="tab" data-mode="challenge">Spelling challenge</button>
+  </nav>
+
+  <section id="cards" class="card">
+    <div class="row"><span class="eyebrow">Flashcard practice</span><span class="counter" id="cardCount">Card 1 of 20</span></div>
+    <div class="progress"><div id="cardProgress"></div></div>
+    <div class="clue" id="cardPrompt">Listen to the word, then try to spell it before revealing the answer.</div>
+    <div class="word" id="cardWord">••••••••</div>
+    <div class="clue" id="cardDefinition"></div>
+    <div class="sentence" id="cardSentence"></div>
+    <div class="actions">
+      <button class="btn" id="hearCard">🔊 Hear word</button>
+      <button class="btn primary" id="reveal">Reveal spelling</button>
+    </div>
+    <div class="answer" id="cardAnswer">
+      <div class="eyebrow">Correct spelling</div><div class="word" id="revealedWord"></div>
+      <div class="controls">
+        <button class="btn" id="cardMissed">✕ Need practice</button>
+        <button class="btn primary" id="cardKnown">✓ I knew it</button>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" id="prevCard">← Previous</button><button class="btn gold" id="nextCard">Next card →</button><button class="btn" id="shuffle">Shuffle</button></div>
+  </section>
+
+  <section id="challenge" class="card hidden">
+    <div class="row"><span class="eyebrow">Spelling bee round</span><span class="counter" id="challengeCount">Question 1</span></div>
+    <div class="progress"><div id="challengeProgress"></div></div>
+    <div class="challenge">
+      <div class="actions"><button class="btn primary" id="hearChallenge">🔊 Hear the word</button><button class="btn" id="hearSlow">🐢 Hear slowly</button></div>
+      <p class="clue" id="challengeDefinition"></p>
+      <p class="sentence" id="challengeSentence"></p>
+      <form id="answerForm">
+        <input class="input" id="spellingInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Type the spelling…" aria-label="Your spelling">
+        <div class="actions"><button class="btn primary" type="submit">Check spelling</button><button class="btn" type="button" id="skip">Skip</button></div>
+      </form>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="actions hidden" id="afterAnswer"><button class="btn gold" id="nextQuestion">Next word →</button></div>
+    </div>
+  </section>
+
+  <details class="card custom">
+    <summary>＋ Add your own spelling words</summary>
+    <p class="muted small">Build a study deck from your spelling bee list. Your custom words stay saved in this browser.</p>
+    <form id="addForm" class="formgrid">
+      <input class="input" id="newWord" placeholder="Word (required)" required>
+      <input class="input" id="newDefinition" placeholder="Definition (optional)">
+      <input class="input wide" id="newSentence" placeholder="Example sentence (optional)">
+      <button class="btn primary wide" type="submit">Add word to deck</button>
+    </form>
+    <div class="wordlist" id="customWords"></div>
+  </details>
+  <div class="actions"><button class="btn" id="reviewMissed">Practice missed words</button><button class="btn" id="resetStats">Reset score</button></div>
+  <p id="audioStatus" class="footer" role="status" aria-live="polite">Pronunciations need internet or device text-to-speech support.</p>
+  <p class="footer">Tip: Use headphones, say the spelling out loud, and practice a few minutes every day.</p>
+</main>
+<script>
+const studyLevels = {"One Bee": ["ran", "rod", "shy", "drink", "mist", "still", "pump", "sharp", "rich", "shoot", "claws", "winter", "yellow", "mouth", "paper", "inside", "whale", "lizard", "nurse", "wind", "good", "bunny", "silly", "stars", "hello", "shell", "easy", "shift", "seal", "crack", "apple", "shine", "spray", "rabbit", "frozen", "market", "beware", "wrong", "leg", "most", "down", "sick", "truck", "bush", "yarn", "body", "heart", "even", "come", "sound", "chips", "year", "feed", "speak", "flock", "sparkle", "hopped", "dirt", "hurt", "steps", "path", "fire", "late", "wings", "house", "tusk", "dive", "fine", "mossy", "beans", "truth", "tallest", "cliffs", "crunch", "sweater", "money", "cabin", "carve", "earth", "half", "fear", "riddle", "illness", "knit", "total", "finish", "spiders", "hospital", "narrow", "foolish", "charming", "beasts", "smoothly", "dangle", "frazzled", "darkness", "shadows", "friend", "swift", "thirsty", "voice", "lead", "cloak", "indoors", "holiday", "entire", "mustard", "medium", "afraid", "source", "shivering", "cottage", "distance", "bamboo", "always", "morning", "lovely", "grandfather", "peer", "peach", "groan", "parade", "trouble", "safety", "library", "company", "pennies", "remember", "pearls", "barge", "humble", "breeze", "sprout", "alive", "return", "footprints", "gentle", "pancake", "sloth", "whistle", "relax", "stout", "guide", "ginger", "hiking", "result", "tangy", "grumpily", "seventy", "soared"], "Two Bee": ["buttons", "clever", "invite", "carefully", "permit", "lunar", "woven", "granola", "laughter", "lounge", "duration", "examine", "tissues", "compromise", "bifocals", "geologist", "atmosphere", "helium", "annoyance", "cuddle", "basement", "butterflies", "sniffling", "awning", "boycotting", "proclaim", "warrior", "salary", "jovial", "dictionary", "versus", "marlin", "incident", "cutlery", "bellowed", "disappointment", "suggested", "interruption", "puffy", "burlap", "kelp", "beneath", "fickle", "molten", "thimble", "rigid", "disappear", "inferior", "business", "lullaby", "Halloween", "Japanese", "chisel", "organism", "truant", "chimpanzees", "concentrate", "tiptoed", "wetlands", "property", "tractor", "relief", "elite", "custody", "fierce", "hurdler", "December", "reinstate", "opposite", "compliment", "investment", "fundraiser", "quail", "pamphlet", "desperate", "piñata", "territory", "monorail", "alphabetical", "prejudice", "cartridge", "fertilizer", "sorceress", "singularity", "battalion", "perimeter", "meticulous", "megahertz", "insurrection", "fascism", "reservoir", "carrion", "elliptical", "cemetery", "stragglers", "exploratory", "integrity", "solidarity", "segregation", "apprentice", "glamorous", "fictitious", "collateral", "precedent", "haddock", "cosmodrome", "regolith", "pheasants", "duende", "matrilineal", "glaucoma", "staccato", "dachshund", "albino", "indigo", "Oregon", "calico", "tortillas", "synthetic", "salamanders", "convertible", "initiation", "materialize", "hypothermia", "arthritis", "pentathlete", "predecessor", "conscious", "piteously", "iridium", "rendezvous", "ridiculous", "bratwurst", "rebuttal", "sputnik", "civilian", "Caesar", "suspension", "snarkiness", "mascara", "magnesium", "optometrist", "schnauzer", "persnickety", "Senegal", "Polaroid", "arnica", "adrenaline", "romerillo", "Aeolus"], "Three Bee": ["newt", "generosity", "wallowing", "mewling", "panoramic", "gauntlets", "appetizing", "prospective", "preconception", "hemisphere", "reluctance", "propeller", "settee", "finesse", "curriculum", "enigmatic", "hypothesis", "thrummed", "burnished", "imperial", "generator", "Doberman", "inanimate", "sentinels", "subscription", "procession", "seminal", "consulate", "modish", "unconscious", "foliage", "quizzically", "increments", "reassurance", "censers", "embankment", "mortar", "persistent", "dominion", "lemmings", "frequency", "blithely", "tenuous", "saxophone", "canter", "cuisine", "influenza", "odorant", "crocheted", "apologetic", "lapels", "unrelenting", "arsonists", "authority", "decisively", "auditory", "self-sufficient", "conspicuous", "perpendicular", "torrential", "sauntered", "juniper", "palazzo", "irrelevant", "diplomatically", "calibrate", "credenza", "comprehensible", "trenchant", "despondent", "echolocation", "conflagration", "thermotaxis", "inaugurate", "bioluminescence", "chickadee", "asymmetric", "sharpei", "endothermy", "éclair", "irascibility", "a cappella", "Amharic", "Gloucester", "prosciutto", "chitinous", "Krio", "Addis Ababa", "protectorate", "pulmonary", "approximation", "glycerin", "alabaster", "arugula", "vibrometer", "mayonnaise", "sputum", "cerulean", "cul-de-sac", "electrolytes", "ototoxic", "Aphrodite", "bogong moth", "yakuza", "sensilla", "eponymous", "Presbyterian", "lactobacillus", "spes phthisica", "Delaware", "undulating", "phantasmal", "brazier", "arachnid", "pathologically", "affinities", "embodiment", "porpoises", "psychological", "assemblage", "leprosy", "eureka", "annelids", "kerosene", "Pennsylvania", "ampulla", "solenodon", "Sierra Leone", "Bildungsroman", "vibrissae", "phenomenon", "alleviate", "legation", "diffidence", "butane", "cataract", "quiche", "euphemism", "acolyte", "innocuous", "Tripoli", "neurological", "mysticetes", "Eritrea", "forsythia", "salicylic acid", "stomatopods", "frankincense", "trichobothria", "Cappadocia"]};
+const starterWords = Object.entries(studyLevels).flatMap(([level,words])=>words.map(word=>({word,level,definition:"",sentence:""})));
+let custom = [];
+try { custom = JSON.parse(localStorage.getItem("spellsprint-custom") || "[]"); } catch {}
+let deck = starterWords.filter(w=>w.level==="One Bee");
+let cardIndex = 0, challengeIndex = 0, score = 0, streak = 0, revealed = false;
+let missed = [];
+const $ = id => document.getElementById(id);
+const clean = s => s.trim().toLocaleLowerCase().replace(/[’']/g,"'");
+function rebuildDeck(){const level=$("levelSelect").value;deck=[...starterWords,...custom].filter(w=>level==="All"||w.level===level);cardIndex=0;challengeIndex=0;showCard();showChallenge();updateStats();}
+$("levelSelect").addEventListener("change",rebuildDeck);
+function saveCustom(){localStorage.setItem("spellsprint-custom",JSON.stringify(custom));}
+function updateStats(){$("score").textContent=score;$("streak").textContent=streak;$("remaining").textContent=deck.length;}
+const audioCache = new Map();
+let currentAudio = null;
+function audioStatus(message){ $("audioStatus").textContent=message; }
+async function speak(word, rate=0.85){
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  audioStatus("Loading pronunciation…");
+  // Try actual recorded pronunciation first. Requires internet access.
+  try {
+    let url=audioCache.get(word.toLowerCase());
+    if(url===undefined){
+      const response=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word),{signal:AbortSignal.timeout(6500)});
+      if(!response.ok)throw new Error("No dictionary recording");
+      const data=await response.json();
+      url=data.flatMap(entry=>entry.phonetics||[]).map(p=>p.audio).find(Boolean)||null;
+      audioCache.set(word.toLowerCase(),url);
+    }
+    if(url){
+      const audio=new Audio(url);currentAudio=audio;audio.playbackRate=rate<0.8?0.75:1;
+      await audio.play();audioStatus("Playing recorded pronunciation");return;
+    }
+  } catch(err) { /* Fall back to speech synthesis. */ }
+  if(!window.speechSynthesis){audioStatus("Audio unavailable. Try opening this file in Chrome with internet access.");return;}
+  try {
+    const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=rate;
+    const voices=speechSynthesis.getVoices();
+    const voice=voices.find(v=>v.lang.toLowerCase()==="en-us")||voices.find(v=>v.lang.toLowerCase().startsWith("en"));
+    if(voice)u.voice=voice;
+    u.onstart=()=>audioStatus("Speaking word…");
+    u.onerror=()=>audioStatus("Audio unavailable. Try Chrome, turn up media volume, and check text-to-speech settings.");
+    speechSynthesis.speak(u);
+    audioStatus("Using device text-to-speech…");
+  }catch(e){audioStatus("Audio unavailable in this browser. Try Chrome.");}
+}
+
+function showCard(){
+ if(!deck.length)return;
+ cardIndex=(cardIndex+deck.length)%deck.length;const c=deck[cardIndex];revealed=false;
+ $("cardCount").textContent=`Card ${cardIndex+1} of ${deck.length}`;
+ $("cardProgress").style.width=`${(cardIndex+1)/deck.length*100}%`;
+ $("cardPrompt").textContent="Listen to the word. Try spelling it before you reveal the answer.";
+ $("cardWord").textContent="•".repeat(Math.min(c.word.length,12));
+ $("cardDefinition").textContent=c.definition||"Listen to the pronunciation and spell the word.";
+ $("cardSentence").textContent=c.sentence||"";
+ $("cardAnswer").classList.remove("show");$("reveal").disabled=false;
+}
+function showChallenge(){
+ if(!deck.length)return;
+ challengeIndex=(challengeIndex+deck.length)%deck.length;const c=deck[challengeIndex];
+ $("challengeCount").textContent=`Question ${challengeIndex+1} of ${deck.length}`;
+ $("challengeProgress").style.width=`${challengeIndex/deck.length*100}%`;
+ $("challengeDefinition").textContent=c.definition||"Listen carefully and type the spelling you hear.";
+ $("challengeSentence").textContent=c.sentence||"";
+ $("spellingInput").value="";$("spellingInput").disabled=false;$("feedback").textContent="";$("feedback").className="feedback";
+ $("afterAnswer").classList.add("hidden");$("spellingInput").focus();
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
+ $("cards").classList.toggle("hidden",b.dataset.mode!=="cards");
+ $("challenge").classList.toggle("hidden",b.dataset.mode!=="challenge");
+ if(b.dataset.mode==="challenge")showChallenge();
+}));
+$("hearCard").onclick=()=>speak(deck[cardIndex].word);
+$("reveal").onclick=()=>{const c=deck[cardIndex];$("revealedWord").textContent=c.word;$("cardWord").textContent=c.word;$("cardAnswer").classList.add("show");$("reveal").disabled=true;speak(c.word);};
+$("prevCard").onclick=()=>{cardIndex--;showCard();};
+$("nextCard").onclick=()=>{cardIndex++;showCard();};
+$("shuffle").onclick=()=>{for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}cardIndex=0;showCard();};
+function rateCard(known){if(known){score++;streak++;}else{streak=0;if(!missed.includes(deck[cardIndex].word))missed.push(deck[cardIndex].word);}updateStats();cardIndex++;showCard();}
+$("cardKnown").onclick=()=>rateCard(true);$("cardMissed").onclick=()=>rateCard(false);
+$("hearChallenge").onclick=()=>speak(deck[challengeIndex].word);
+$("hearSlow").onclick=()=>speak(deck[challengeIndex].word,.65);
+function finishChallenge(correct,skipped=false){
+ const c=deck[challengeIndex],f=$("feedback");
+ if(correct){score++;streak++;f.textContent="✓ Correct! Great spelling.";f.className="feedback good";}
+ else{streak=0;if(!missed.includes(c.word))missed.push(c.word);f.textContent=(skipped?"Skipped. ":"Not quite. ")+"Correct spelling: "+c.word;f.className="feedback bad";}
+ updateStats();$("spellingInput").disabled=true;$("afterAnswer").classList.remove("hidden");
+}
+$("answerForm").onsubmit=e=>{e.preventDefault();if($("spellingInput").disabled)return;const target=deck[challengeIndex].word;const alternatives={"fertilizer":["fertiliser"],"materialize":["materialise"],"odorant":["odourant"],"glycerin":["glycerine"],"brazier":["brasier"],"kerosene":["kerosine"]};const correct=[target,...(alternatives[target]||[])].some(w=>clean($("spellingInput").value)===clean(w));finishChallenge(correct);};
+$("skip").onclick=()=>finishChallenge(false,true);
+$("nextQuestion").onclick=()=>{challengeIndex++;if(challengeIndex>=deck.length){challengeIndex=0;$("feedback").textContent="Round complete! Starting again."; }showChallenge();};
+$("addForm").onsubmit=e=>{
+ e.preventDefault();const word=$("newWord").value.trim();if(!word)return;
+ if(deck.some(x=>clean(x.word)===clean(word))){alert("That word is already in your deck.");return;}
+ const item={word,definition:$("newDefinition").value.trim(),sentence:$("newSentence").value.trim()};
+ item.level=$("levelSelect").value==="All"?"One Bee":$("levelSelect").value;custom.push(item);saveCustom();rebuildDeck();$("newWord").value="";$("newDefinition").value="";$("newSentence").value="";
+ renderCustom();updateStats();showCard();
+};
+function renderCustom(){
+ $("customWords").innerHTML="";
+ custom.forEach((c,i)=>{const chip=document.createElement("span");chip.className="chip";chip.textContent=c.word+" ×";chip.title="Remove custom word";
+ chip.style.cursor="pointer";chip.onclick=()=>{custom.splice(i,1);saveCustom();renderCustom();rebuildDeck();};$("customWords").append(chip);});
+}
+$("reviewMissed").onclick=()=>{
+ if(!missed.length){alert("No missed words yet. Try a challenge round first!");return;}
+ const words=missed.map(w=>[...starterWords,...custom].find(c=>c.word===w)).filter(Boolean);if(!words.length)return;
+ deck=words;cardIndex=0;challengeIndex=0;showCard();updateStats();document.querySelector('[data-mode="cards"]').click();
+};
+$("resetStats").onclick=()=>{score=0;streak=0;missed=[];updateStats();};
+renderCustom();showCard();updateStats();
+</script>
+<script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
+</body>
+</html>
