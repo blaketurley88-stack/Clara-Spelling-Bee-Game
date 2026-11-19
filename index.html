@@ -53,6 +53,7 @@ input::placeholder{color:#a991af}
     <label for="quietMode"><strong>🌙 Quiet study mode (no sound)</strong></label>
     <input type="checkbox" id="quietMode" style="width:24px;height:24px;accent-color:#cf64ad" aria-label="Quiet study mode">
   </div>
+  <div id="modeNotice" role="status" aria-live="polite" style="margin:-4px 0 14px;padding:13px 15px;border-radius:14px;background:#f8e4f5;border:1px solid #e8a9d9;font-weight:700;color:#73305d">🔊 Audio study: Tap Hear Word to listen.</div>
   <nav class="tabs" aria-label="Game modes">
     <button class="tab active" data-mode="cards">Flashcards</button>
     <button class="tab" data-mode="challenge">Spelling challenge</button>
@@ -117,29 +118,30 @@ input::placeholder{color:#a991af}
 const studyLevels = {"One Bee": ["ran", "rod", "shy", "drink", "mist", "still", "pump", "sharp", "rich", "shoot", "claws", "winter", "yellow", "mouth", "paper", "inside", "whale", "lizard", "nurse", "wind", "good", "bunny", "silly", "stars", "hello", "shell", "easy", "shift", "seal", "crack", "apple", "shine", "spray", "rabbit", "frozen", "market", "beware", "wrong", "leg", "most", "down", "sick", "truck", "bush", "yarn", "body", "heart", "even", "come", "sound", "chips", "year", "feed", "speak", "flock", "sparkle", "hopped", "dirt", "hurt", "steps", "path", "fire", "late", "wings", "house", "tusk", "dive", "fine", "mossy", "beans", "truth", "tallest", "cliffs", "crunch", "sweater", "money", "cabin", "carve", "earth", "half", "fear", "riddle", "illness", "knit", "total", "finish", "spiders", "hospital", "narrow", "foolish", "charming", "beasts", "smoothly", "dangle", "frazzled", "darkness", "shadows", "friend", "swift", "thirsty", "voice", "lead", "cloak", "indoors", "holiday", "entire", "mustard", "medium", "afraid", "source", "shivering", "cottage", "distance", "bamboo", "always", "morning", "lovely", "grandfather", "peer", "peach", "groan", "parade", "trouble", "safety", "library", "company", "pennies", "remember", "pearls", "barge", "humble", "breeze", "sprout", "alive", "return", "footprints", "gentle", "pancake", "sloth", "whistle", "relax", "stout", "guide", "ginger", "hiking", "result", "tangy", "grumpily", "seventy", "soared"], "Two Bee": ["buttons", "clever", "invite", "carefully", "permit", "lunar", "woven", "granola", "laughter", "lounge", "duration", "examine", "tissues", "compromise", "bifocals", "geologist", "atmosphere", "helium", "annoyance", "cuddle", "basement", "butterflies", "sniffling", "awning", "boycotting", "proclaim", "warrior", "salary", "jovial", "dictionary", "versus", "marlin", "incident", "cutlery", "bellowed", "disappointment", "suggested", "interruption", "puffy", "burlap", "kelp", "beneath", "fickle", "molten", "thimble", "rigid", "disappear", "inferior", "business", "lullaby", "Halloween", "Japanese", "chisel", "organism", "truant", "chimpanzees", "concentrate", "tiptoed", "wetlands", "property", "tractor", "relief", "elite", "custody", "fierce", "hurdler", "December", "reinstate", "opposite", "compliment", "investment", "fundraiser", "quail", "pamphlet", "desperate", "piñata", "territory", "monorail", "alphabetical", "prejudice", "cartridge", "fertilizer", "sorceress", "singularity", "battalion", "perimeter", "meticulous", "megahertz", "insurrection", "fascism", "reservoir", "carrion", "elliptical", "cemetery", "stragglers", "exploratory", "integrity", "solidarity", "segregation", "apprentice", "glamorous", "fictitious", "collateral", "precedent", "haddock", "cosmodrome", "regolith", "pheasants", "duende", "matrilineal", "glaucoma", "staccato", "dachshund", "albino", "indigo", "Oregon", "calico", "tortillas", "synthetic", "salamanders", "convertible", "initiation", "materialize", "hypothermia", "arthritis", "pentathlete", "predecessor", "conscious", "piteously", "iridium", "rendezvous", "ridiculous", "bratwurst", "rebuttal", "sputnik", "civilian", "Caesar", "suspension", "snarkiness", "mascara", "magnesium", "optometrist", "schnauzer", "persnickety", "Senegal", "Polaroid", "arnica", "adrenaline", "romerillo", "Aeolus"], "Three Bee": ["newt", "generosity", "wallowing", "mewling", "panoramic", "gauntlets", "appetizing", "prospective", "preconception", "hemisphere", "reluctance", "propeller", "settee", "finesse", "curriculum", "enigmatic", "hypothesis", "thrummed", "burnished", "imperial", "generator", "Doberman", "inanimate", "sentinels", "subscription", "procession", "seminal", "consulate", "modish", "unconscious", "foliage", "quizzically", "increments", "reassurance", "censers", "embankment", "mortar", "persistent", "dominion", "lemmings", "frequency", "blithely", "tenuous", "saxophone", "canter", "cuisine", "influenza", "odorant", "crocheted", "apologetic", "lapels", "unrelenting", "arsonists", "authority", "decisively", "auditory", "self-sufficient", "conspicuous", "perpendicular", "torrential", "sauntered", "juniper", "palazzo", "irrelevant", "diplomatically", "calibrate", "credenza", "comprehensible", "trenchant", "despondent", "echolocation", "conflagration", "thermotaxis", "inaugurate", "bioluminescence", "chickadee", "asymmetric", "sharpei", "endothermy", "éclair", "irascibility", "a cappella", "Amharic", "Gloucester", "prosciutto", "chitinous", "Krio", "Addis Ababa", "protectorate", "pulmonary", "approximation", "glycerin", "alabaster", "arugula", "vibrometer", "mayonnaise", "sputum", "cerulean", "cul-de-sac", "electrolytes", "ototoxic", "Aphrodite", "bogong moth", "yakuza", "sensilla", "eponymous", "Presbyterian", "lactobacillus", "spes phthisica", "Delaware", "undulating", "phantasmal", "brazier", "arachnid", "pathologically", "affinities", "embodiment", "porpoises", "psychological", "assemblage", "leprosy", "eureka", "annelids", "kerosene", "Pennsylvania", "ampulla", "solenodon", "Sierra Leone", "Bildungsroman", "vibrissae", "phenomenon", "alleviate", "legation", "diffidence", "butane", "cataract", "quiche", "euphemism", "acolyte", "innocuous", "Tripoli", "neurological", "mysticetes", "Eritrea", "forsythia", "salicylic acid", "stomatopods", "frankincense", "trichobothria", "Cappadocia"]};
 const starterWords = Object.entries(studyLevels).flatMap(([level,words])=>words.map(word=>({word,level,definition:"",sentence:""})));
 let custom = [];
-try { custom = JSON.parse(localStorage.getItem("spellsprint-custom") || "[]"); } catch {}
+try { const stored=JSON.parse(localStorage.getItem("spellsprint-custom") || "[]"); custom=Array.isArray(stored)?stored.filter(x=>x&&typeof x.word==="string").map(x=>({...x,level:x.level||"One Bee"})):[]; } catch {}
 let deck = starterWords.filter(w=>w.level==="One Bee");
 let cardIndex = 0, challengeIndex = 0, score = 0, streak = 0, revealed = false;
-let quietMode = localStorage.getItem('clara-quiet-mode') === 'true';
+let quietMode = false; try{quietMode=localStorage.getItem('clara-quiet-mode')==='true';}catch{}
 let peekTimer = null;
 function hidePeek(){if(peekTimer)clearTimeout(peekTimer);peekTimer=null;$('peekDisplay').classList.add('hidden');$('peekDisplay').textContent='';}
 function updateQuietMode(){
  $('quietMode').checked=quietMode;
+ $('modeNotice').textContent=quietMode?'🌙 Quiet Mode is ON! Flashcards: tap Show study word. Spelling Challenge: tap Study word (4 seconds), then type it.':'🔊 Audio Mode is ON! Tap Hear Word to listen.';
+ $('modeNotice').style.background=quietMode?'#f9d9f0':'#f8e4f5';
  ['hearCard','hearChallenge','hearSlow'].forEach(id=>$(id).style.display=quietMode?'none':'');
  $('studyCardWord').style.display=quietMode?'':'none';
  $('peekWord').style.display=quietMode?'':'none';
- $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Study a word, hide it, then spell it from memory.':'Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.';
- hidePeek();showCard();showChallenge();
+ $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Use the Show study word button on Flashcards or Study word (4 seconds) in Spelling Challenge.':'Tap Hear Word to use your device voice. On iPhone, use Safari and turn up the media volume.';
+ hidePeek();
+ if(!$("cards").classList.contains("hidden"))showCard();
+ else showChallenge();
 }
-$('quietMode').onchange=e=>{quietMode=e.target.checked;localStorage.setItem('clara-quiet-mode',String(quietMode));if(window.speechSynthesis)window.speechSynthesis.cancel();if(currentAudio)currentAudio.pause();updateQuietMode();};
-$('peekWord').onclick=()=>{hidePeek();$('peekDisplay').textContent=deck[challengeIndex].word;$('peekDisplay').classList.remove('hidden');peekTimer=setTimeout(hidePeek,4000);};
-$('studyCardWord').onclick=()=>{$('cardWord').textContent=deck[cardIndex].word;$('cardPrompt').textContent='Study the spelling, then tap Hide word and try to spell it from memory.';$('studyCardWord').textContent='🙈 Hide word';$('studyCardWord').onclick=()=>{$('cardWord').textContent='•'.repeat(Math.min(deck[cardIndex].word.length,12));$('cardPrompt').textContent='Now spell it from memory, then reveal to check.';$('studyCardWord').textContent='👀 Show study word';$('studyCardWord').onclick=null;};};
 let missed = [];
 const $ = id => document.getElementById(id);
 const clean = s => s.trim().toLocaleLowerCase().replace(/[’']/g,"'");
 function rebuildDeck(){const level=$("levelSelect").value;deck=[...starterWords,...custom].filter(w=>level==="All"||w.level===level);cardIndex=0;challengeIndex=0;showCard();showChallenge();updateStats();}
 $("levelSelect").addEventListener("change",rebuildDeck);
-function saveCustom(){localStorage.setItem("spellsprint-custom",JSON.stringify(custom));}
+function saveCustom(){try{localStorage.setItem("spellsprint-custom",JSON.stringify(custom));}catch{alert("This browser cannot save custom words right now.");}}
 function updateStats(){$("score").textContent=score;$("streak").textContent=streak;$("remaining").textContent=deck.length;}
 // iOS Safari requires speech to start directly in the tap handler.
 // Do not await a dictionary API call before speaking: that loses the user gesture.
@@ -168,12 +170,19 @@ function speak(word, rate=0.85){
  }catch(e){audioStatus('Speech unavailable: '+e.message);}
 }
 
-function showCardStudyButton(c){$("studyCardWord").onclick=()=>{$("cardWord").textContent=c.word;$("cardPrompt").textContent="Study the word, then hide it and spell from memory.";$("studyCardWord").textContent="🙈 Hide word";$("studyCardWord").onclick=()=>{$("cardWord").textContent="•".repeat(Math.min(c.word.length,12));$("cardPrompt").textContent="Spell from memory, then reveal to check.";$("studyCardWord").textContent="👀 Show study word";showCardStudyButton(c);};};}
+let cardStudyVisible=false;
+function toggleCardStudy(){
+ const c=deck[cardIndex];
+ cardStudyVisible=!cardStudyVisible;
+ $("cardWord").textContent=cardStudyVisible?c.word:"•".repeat(Math.min(c.word.length,12));
+ $("studyCardWord").textContent=cardStudyVisible?"🙈 Hide word":"👀 Show study word";
+ $("cardPrompt").textContent=cardStudyVisible?"Memorize the spelling, then hide it.":"Spell the word from memory, then reveal to check.";
+}
 function showCard(){
  if(!deck.length)return;
  cardIndex=(cardIndex+deck.length)%deck.length;const c=deck[cardIndex];revealed=false;
- showCardStudyButton(c);
- $("studyCardWord").textContent="👀 Show study word";$("studyCardWord").onclick=()=>{$("cardWord").textContent=c.word;$("cardPrompt").textContent="Study the word, then hide it and spell from memory.";$("studyCardWord").textContent="🙈 Hide word";$("studyCardWord").onclick=()=>{$("cardWord").textContent="•".repeat(Math.min(c.word.length,12));$("cardPrompt").textContent="Spell from memory, then reveal to check.";$("studyCardWord").textContent="👀 Show study word";showCardStudyButton(c);};};
+ cardStudyVisible=false;
+ $("studyCardWord").textContent="👀 Show study word";
  $("cardCount").textContent=`Card ${cardIndex+1} of ${deck.length}`;
  $("cardProgress").style.width=`${(cardIndex+1)/deck.length*100}%`;
  $("cardPrompt").textContent=quietMode?"Tap Show study word, memorize it, then hide it and spell from memory.":"Listen to the word. Try spelling it before you reveal the answer.";
@@ -189,8 +198,8 @@ function showChallenge(){
  $("challengeProgress").style.width=`${challengeIndex/deck.length*100}%`;
  $("challengeDefinition").textContent=c.definition||(quietMode?"Tap Study word to see it for 4 seconds, then type it from memory.":"Listen carefully and type the spelling you hear.");
  $("challengeSentence").textContent=c.sentence||"";
- $("spellingInput").value="";$("spellingInput").disabled=false;$("feedback").textContent="";$("feedback").className="feedback";
- $("afterAnswer").classList.add("hidden");$("spellingInput").focus();
+ $("spellingInput").value="";$("spellingInput").disabled=false;$("skip").disabled=false;$("feedback").textContent="";$("feedback").className="feedback";
+ $("afterAnswer").classList.add("hidden");if(!$("challenge").classList.contains("hidden"))$("spellingInput").focus();
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
@@ -208,17 +217,19 @@ $("cardKnown").onclick=()=>rateCard(true);$("cardMissed").onclick=()=>rateCard(f
 $("hearChallenge").onclick=()=>speak(deck[challengeIndex].word);
 $("hearSlow").onclick=()=>speak(deck[challengeIndex].word,.65);
 function finishChallenge(correct,skipped=false){
+ if($("spellingInput").disabled)return;
+ hidePeek();
  const c=deck[challengeIndex],f=$("feedback");
  if(correct){score++;streak++;f.textContent="✓ Correct! Great spelling.";f.className="feedback good";}
  else{streak=0;if(!missed.includes(c.word))missed.push(c.word);f.textContent=(skipped?"Skipped. ":"Not quite. ")+"Correct spelling: "+c.word;f.className="feedback bad";}
- updateStats();$("spellingInput").disabled=true;$("afterAnswer").classList.remove("hidden");
+ updateStats();$("spellingInput").disabled=true;$("skip").disabled=true;$("afterAnswer").classList.remove("hidden");
 }
 $("answerForm").onsubmit=e=>{e.preventDefault();if($("spellingInput").disabled)return;const target=deck[challengeIndex].word;const alternatives={"fertilizer":["fertiliser"],"materialize":["materialise"],"odorant":["odourant"],"glycerin":["glycerine"],"brazier":["brasier"],"kerosene":["kerosine"]};const correct=[target,...(alternatives[target]||[])].some(w=>clean($("spellingInput").value)===clean(w));finishChallenge(correct);};
 $("skip").onclick=()=>finishChallenge(false,true);
-$("nextQuestion").onclick=()=>{challengeIndex++;if(challengeIndex>=deck.length){challengeIndex=0;$("feedback").textContent="Round complete! Starting again."; }showChallenge();};
+$("nextQuestion").onclick=()=>{challengeIndex++;if(challengeIndex>=deck.length){challengeIndex=0;}showChallenge();};
 $("addForm").onsubmit=e=>{
  e.preventDefault();const word=$("newWord").value.trim();if(!word)return;
- if(deck.some(x=>clean(x.word)===clean(word))){alert("That word is already in your deck.");return;}
+ if([...starterWords,...custom].some(x=>clean(x.word)===clean(word))){alert("That word is already in your deck.");return;}
  const item={word,definition:$("newDefinition").value.trim(),sentence:$("newSentence").value.trim()};
  item.level=$("levelSelect").value==="All"?"One Bee":$("levelSelect").value;custom.push(item);saveCustom();rebuildDeck();$("newWord").value="";$("newDefinition").value="";$("newSentence").value="";
  renderCustom();updateStats();showCard();
@@ -234,6 +245,21 @@ $("reviewMissed").onclick=()=>{
  deck=words;cardIndex=0;challengeIndex=0;showCard();updateStats();document.querySelector('[data-mode="cards"]').click();
 };
 $("resetStats").onclick=()=>{score=0;streak=0;missed=[];updateStats();};
+$("quietMode").addEventListener("change", e=>{
+ quietMode=e.target.checked;
+ try{localStorage.setItem("clara-quiet-mode",String(quietMode));}catch{}
+ if(window.speechSynthesis)window.speechSynthesis.cancel();
+ if(currentAudio){currentAudio.pause();currentAudio=null;}
+ updateQuietMode();
+});
+$("peekWord").addEventListener("click",()=>{
+ if(!quietMode)return;
+ hidePeek();
+ $("peekDisplay").textContent=deck[challengeIndex].word;
+ $("peekDisplay").classList.remove("hidden");
+ peekTimer=setTimeout(hidePeek,4000);
+});
+$("studyCardWord").addEventListener("click",toggleCardStudy);
 renderCustom();showCard();updateStats();updateQuietMode();
 </script>
 <script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
