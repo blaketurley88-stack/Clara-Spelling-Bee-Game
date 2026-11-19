@@ -2,6 +2,7 @@
   "name": "Clara's Spell Garden",
   "short_name": "Spell Garden",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#fff2fb",
   "theme_color": "#f9b9df",
