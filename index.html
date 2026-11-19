@@ -49,6 +49,10 @@ input::placeholder{color:#a991af}
   </header>
 
   <div class="row" style="margin-bottom:14px"><label for="levelSelect"><strong>Study level</strong></label><select id="levelSelect" class="btn" aria-label="Study level"><option value="One Bee">One Bee</option><option value="Two Bee">Two Bee</option><option value="Three Bee">Three Bee</option><option value="All">All levels</option></select></div>
+  <div class="row" style="margin-bottom:14px;background:#fff0fa;padding:12px;border-radius:14px;border:1px solid #f1c9e6">
+    <label for="quietMode"><strong>🌙 Quiet study mode (no sound)</strong></label>
+    <input type="checkbox" id="quietMode" style="width:24px;height:24px;accent-color:#cf64ad" aria-label="Quiet study mode">
+  </div>
   <nav class="tabs" aria-label="Game modes">
     <button class="tab active" data-mode="cards">Flashcards</button>
     <button class="tab" data-mode="challenge">Spelling challenge</button>
@@ -63,6 +67,7 @@ input::placeholder{color:#a991af}
     <div class="sentence" id="cardSentence"></div>
     <div class="actions">
       <button class="btn" id="hearCard">🔊 Hear word</button>
+      <button class="btn" id="studyCardWord" style="display:none">👀 Show study word</button>
       <button class="btn primary" id="reveal">Reveal spelling</button>
     </div>
     <div class="answer" id="cardAnswer">
@@ -79,6 +84,8 @@ input::placeholder{color:#a991af}
     <div class="row"><span class="eyebrow">Spelling bee round</span><span class="counter" id="challengeCount">Question 1</span></div>
     <div class="progress"><div id="challengeProgress"></div></div>
     <div class="challenge">
+      <div class="actions"><button class="btn primary" id="peekWord" style="display:none">👀 Study word (4 seconds)</button></div>
+      <div class="word hidden" id="peekDisplay" style="font-size:clamp(28px,6vw,46px)" aria-live="polite"></div>
       <div class="actions"><button class="btn primary" id="hearChallenge">🔊 Hear the word</button><button class="btn" id="hearSlow">🐢 Hear slowly</button></div>
       <p class="clue" id="challengeDefinition"></p>
       <p class="sentence" id="challengeSentence"></p>
@@ -113,6 +120,20 @@ let custom = [];
 try { custom = JSON.parse(localStorage.getItem("spellsprint-custom") || "[]"); } catch {}
 let deck = starterWords.filter(w=>w.level==="One Bee");
 let cardIndex = 0, challengeIndex = 0, score = 0, streak = 0, revealed = false;
+let quietMode = localStorage.getItem('clara-quiet-mode') === 'true';
+let peekTimer = null;
+function hidePeek(){if(peekTimer)clearTimeout(peekTimer);peekTimer=null;$('peekDisplay').classList.add('hidden');$('peekDisplay').textContent='';}
+function updateQuietMode(){
+ $('quietMode').checked=quietMode;
+ ['hearCard','hearChallenge','hearSlow'].forEach(id=>$(id).style.display=quietMode?'none':'');
+ $('studyCardWord').style.display=quietMode?'':'none';
+ $('peekWord').style.display=quietMode?'':'none';
+ $('audioStatus').textContent=quietMode?'🌙 Quiet mode on: no sounds will play. Study a word, hide it, then spell it from memory.':'Pronunciations need internet or device text-to-speech support.';
+ hidePeek();showCard();showChallenge();
+}
+$('quietMode').onchange=e=>{quietMode=e.target.checked;localStorage.setItem('clara-quiet-mode',String(quietMode));if(window.speechSynthesis)window.speechSynthesis.cancel();if(currentAudio)currentAudio.pause();updateQuietMode();};
+$('peekWord').onclick=()=>{hidePeek();$('peekDisplay').textContent=deck[challengeIndex].word;$('peekDisplay').classList.remove('hidden');peekTimer=setTimeout(hidePeek,4000);};
+$('studyCardWord').onclick=()=>{$('cardWord').textContent=deck[cardIndex].word;$('cardPrompt').textContent='Study the spelling, then tap Hide word and try to spell it from memory.';$('studyCardWord').textContent='🙈 Hide word';$('studyCardWord').onclick=()=>{$('cardWord').textContent='•'.repeat(Math.min(deck[cardIndex].word.length,12));$('cardPrompt').textContent='Now spell it from memory, then reveal to check.';$('studyCardWord').textContent='👀 Show study word';$('studyCardWord').onclick=null;};};
 let missed = [];
 const $ = id => document.getElementById(id);
 const clean = s => s.trim().toLocaleLowerCase().replace(/[’']/g,"'");
@@ -124,6 +145,7 @@ const audioCache = new Map();
 let currentAudio = null;
 function audioStatus(message){ $("audioStatus").textContent=message; }
 async function speak(word, rate=0.85){
+ if(quietMode)return;
   if(currentAudio){currentAudio.pause();currentAudio=null;}
   if(window.speechSynthesis) window.speechSynthesis.cancel();
   audioStatus("Loading pronunciation…");
@@ -155,23 +177,26 @@ async function speak(word, rate=0.85){
   }catch(e){audioStatus("Audio unavailable in this browser. Try Chrome.");}
 }
 
+function showCardStudyButton(c){$("studyCardWord").onclick=()=>{$("cardWord").textContent=c.word;$("cardPrompt").textContent="Study the word, then hide it and spell from memory.";$("studyCardWord").textContent="🙈 Hide word";$("studyCardWord").onclick=()=>{$("cardWord").textContent="•".repeat(Math.min(c.word.length,12));$("cardPrompt").textContent="Spell from memory, then reveal to check.";$("studyCardWord").textContent="👀 Show study word";showCardStudyButton(c);};};}
 function showCard(){
  if(!deck.length)return;
  cardIndex=(cardIndex+deck.length)%deck.length;const c=deck[cardIndex];revealed=false;
+ showCardStudyButton(c);
+ $("studyCardWord").textContent="👀 Show study word";$("studyCardWord").onclick=()=>{$("cardWord").textContent=c.word;$("cardPrompt").textContent="Study the word, then hide it and spell from memory.";$("studyCardWord").textContent="🙈 Hide word";$("studyCardWord").onclick=()=>{$("cardWord").textContent="•".repeat(Math.min(c.word.length,12));$("cardPrompt").textContent="Spell from memory, then reveal to check.";$("studyCardWord").textContent="👀 Show study word";showCardStudyButton(c);};};
  $("cardCount").textContent=`Card ${cardIndex+1} of ${deck.length}`;
  $("cardProgress").style.width=`${(cardIndex+1)/deck.length*100}%`;
- $("cardPrompt").textContent="Listen to the word. Try spelling it before you reveal the answer.";
+ $("cardPrompt").textContent=quietMode?"Tap Show study word, memorize it, then hide it and spell from memory.":"Listen to the word. Try spelling it before you reveal the answer.";
  $("cardWord").textContent="•".repeat(Math.min(c.word.length,12));
- $("cardDefinition").textContent=c.definition||"Listen to the pronunciation and spell the word.";
+ $("cardDefinition").textContent=c.definition||(quietMode?"Silent visual memory practice":"Listen to the pronunciation and spell the word.");
  $("cardSentence").textContent=c.sentence||"";
  $("cardAnswer").classList.remove("show");$("reveal").disabled=false;
 }
 function showChallenge(){
  if(!deck.length)return;
- challengeIndex=(challengeIndex+deck.length)%deck.length;const c=deck[challengeIndex];
+ hidePeek();challengeIndex=(challengeIndex+deck.length)%deck.length;const c=deck[challengeIndex];
  $("challengeCount").textContent=`Question ${challengeIndex+1} of ${deck.length}`;
  $("challengeProgress").style.width=`${challengeIndex/deck.length*100}%`;
- $("challengeDefinition").textContent=c.definition||"Listen carefully and type the spelling you hear.";
+ $("challengeDefinition").textContent=c.definition||(quietMode?"Tap Study word to see it for 4 seconds, then type it from memory.":"Listen carefully and type the spelling you hear.");
  $("challengeSentence").textContent=c.sentence||"";
  $("spellingInput").value="";$("spellingInput").disabled=false;$("feedback").textContent="";$("feedback").className="feedback";
  $("afterAnswer").classList.add("hidden");$("spellingInput").focus();
@@ -183,7 +208,7 @@ document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
  if(b.dataset.mode==="challenge")showChallenge();
 }));
 $("hearCard").onclick=()=>speak(deck[cardIndex].word);
-$("reveal").onclick=()=>{const c=deck[cardIndex];$("revealedWord").textContent=c.word;$("cardWord").textContent=c.word;$("cardAnswer").classList.add("show");$("reveal").disabled=true;speak(c.word);};
+$("reveal").onclick=()=>{const c=deck[cardIndex];$("revealedWord").textContent=c.word;$("cardWord").textContent=c.word;$("cardAnswer").classList.add("show");$("reveal").disabled=true;if(!quietMode)speak(c.word);};
 $("prevCard").onclick=()=>{cardIndex--;showCard();};
 $("nextCard").onclick=()=>{cardIndex++;showCard();};
 $("shuffle").onclick=()=>{for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}cardIndex=0;showCard();};
@@ -218,7 +243,7 @@ $("reviewMissed").onclick=()=>{
  deck=words;cardIndex=0;challengeIndex=0;showCard();updateStats();document.querySelector('[data-mode="cards"]').click();
 };
 $("resetStats").onclick=()=>{score=0;streak=0;missed=[];updateStats();};
-renderCustom();showCard();updateStats();
+renderCustom();showCard();updateStats();updateQuietMode();
 </script>
 <script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
 </body>
