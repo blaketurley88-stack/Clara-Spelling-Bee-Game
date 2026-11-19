@@ -12,7 +12,7 @@
 @media(prefers-reduced-motion:reduce){.pet-hero .pet-emoji{animation:none}}
 .voice-settings{margin:15px 0;padding:14px;background:#f9edff;border:1px solid #e8c6f1;border-radius:15px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}.voice-settings select{flex:1;min-width:165px}.voice-settings .hint{width:100%;margin:0;text-align:left}.voice-settings label{width:100%}</style></head><body><main><header><h1>🌸 Clara's Spell Garden ✨</h1><p class="sub">Grow your spelling superpowers, one word at a time! 🦋</p></header>
 <div class="stats"><div class="stat"><strong id="stars">0</strong><small>⭐ Total stars</small></div><div class="stat"><strong id="streak">0</strong><small>🔥 Streak</small></div><div class="stat"><strong id="mastered">0</strong><small>🏆 Mastered</small></div></div>
-<section class="panel"><div class="row"><label for="level"><b>🐝 Study level</b></label><select id="level"><option>One Bee</option><option>Two Bee</option><option>Three Bee</option><option value="All">All levels</option></select></div><div class="row" style="margin-top:14px"><label for="quiet"><b>🌙 Quiet mode</b></label><input id="quiet" type="checkbox" style="width:25px;height:25px;accent-color:#c258aa"></div><div id="voiceSettings" class="voice-settings"><label for="voiceChoice"><b>🇺🇸 Clear American voice</b></label><select id="voiceChoice" aria-label="Choose an American English voice"><option value="">Finding US voices…</option></select><button class="btn" type="button" id="testVoice">🔊 Test voice</button><p class="hint" id="voiceHint">Standard American English voices only. Premium voices are excluded because Safari may not support them.</p></div><p class="hint" id="modeHint">🔊 Listen and type the word!</p><div class="row"><span class="tag" id="levelProgressText">0 mastered</span><span class="badge" id="milestone">🌱 Seedling</span></div><div class="progress" style="margin-top:9px"><div id="masteryBar"></div></div></section>
+<section class="panel"><div class="row"><label for="level"><b>🐝 Study level</b></label><select id="level"><option>One Bee</option><option>Two Bee</option><option>Three Bee</option><option value="All">All levels</option></select></div><div class="row" style="margin-top:14px"><label for="quiet"><b>🌙 Quiet mode</b></label><input id="quiet" type="checkbox" style="width:25px;height:25px;accent-color:#c258aa"></div><div id="voiceSettings" class="voice-settings"><label for="voiceChoice"><b>🇺🇸 Clear American voice</b></label><select id="voiceChoice" aria-label="Choose an American English voice"><option value="">Finding US voices…</option></select><button class="btn" type="button" id="testVoice">🔊 Test voice</button><p class="hint" id="voiceHint">Choose Automatic or test the American English voices Safari provides.</p></div><p class="hint" id="modeHint">🔊 Listen and type the word!</p><div class="row"><span class="tag" id="levelProgressText">0 mastered</span><span class="badge" id="milestone">🌱 Seedling</span></div><div class="progress" style="margin-top:9px"><div id="masteryBar"></div></div></section>
 <div class="tabs"><button class="btn active" data-tab="challenge">✍️ Spell it!</button><button class="btn" data-tab="cards">🌷 Flashcards</button><button class="btn" data-tab="progress">🏆 Progress</button><button class="btn" data-tab="pets">🧸 Plushies</button></div>
 <section class="panel" id="challenge"><div class="row"><span class="tag">✨ Spelling challenge</span><span id="counter" class="tag"></span></div><div class="progress" style="margin:13px 0"><div id="roundBar"></div></div><div class="prompt" id="instruction"></div><p class="hint" id="buddyCheer"></p><div id="peekDisplay" class="bigword hidden"></div><div class="buttons"><button id="hear" class="btn primary">🔊 Hear word</button><button id="slow" class="btn">🐢 Slowly</button><button id="peek" class="btn gold hidden">👀 Study word (4 seconds)</button></div><form id="answerForm"><input id="answer" class="field" placeholder="Type your spelling here…" autocapitalize="none" autocomplete="off" spellcheck="false" aria-label="Spell the word"><div class="buttons"><button class="btn primary" id="check" type="submit">✨ Check my spelling!</button><button class="btn" type="button" id="skip">Skip for now</button></div></form><div id="feedback" class="feedback hidden" role="status" aria-live="polite"></div><div class="buttons"><button id="next" class="btn gold hidden">Next word ➜</button></div><p class="hint" id="audioStatus"></p></section>
 <section class="panel hidden" id="cards"><div class="row"><span class="tag">🌷 Memory flashcards</span><span id="cardCounter" class="tag"></span></div><p class="prompt">Look, hide, and spell the word from memory!</p><div id="cardWord" class="bigword">🌸</div><div class="buttons"><button id="showCard" class="btn primary">👀 Show word</button><button id="hideCard" class="btn">🙈 Hide word</button><button id="cardHear" class="btn">🔊 Hear word</button></div><div class="buttons"><button id="cardMiss" class="btn">💗 Need practice</button><button id="cardRight" class="btn gold">⭐ I got it!</button></div><div class="buttons"><button id="cardNext" class="btn">Next card ➜</button></div></section>
@@ -115,50 +115,50 @@ function switchTab(name){tab=name;for(const b of document.querySelectorAll('[dat
 function updateMode(){state.quiet=$('quiet').checked;save();cancelPeek();for(const id of ['hear','slow','cardHear'])$(id).classList.toggle('hidden',state.quiet);$('peek').classList.toggle('hidden',!state.quiet);$('voiceSettings').classList.toggle('hidden',state.quiet);$('modeHint').textContent=state.quiet?'🌙 Quiet mode: study a word, hide it, then type!':'🔊 Audio mode: hear a word and spell it!';if(state.quiet&&'speechSynthesis'in window)speechSynthesis.cancel();showQuestion();progress();}
 let lastUtterance=null;
 let americanVoices=[];
-// Safari may list premium voices that web speech cannot actually play.
-// Prefer standard US voices and keep a safe US-language fallback.
-const noveltyVoice=/\b(eloquence|novelty|robot|bad news|good news|bells|boing|bubbles|cellos|deranged|hysterical|organ|trinoids|whisper|wobble|zarvox|fred|ralph|albert|junior|kathy|princess|vicki|victoria)\b/i;
-const unavailableVoice=/\b(premium|enhanced|siri)\b/i;
-function compatibleVoice(v){return /^en[-_]US$/i.test(v.lang)&&!noveltyVoice.test(v.name)&&!unavailableVoice.test(v.name);}
-function voiceRank(v){const n=v.name.toLowerCase();return /samantha|ava|allison|zoe|susan|nicky|joelle|noelle/.test(n)?3:v.localService?2:1;}
+// iOS Safari can expose a limited, delayed or empty voice list.
+// Do not infer usability or quality from a voice's name.
+const noveltyVoice=/\b(eloquence|novelty|robot|bad news|good news|bells|boing|bubbles|cellos|deranged|hysterical|organ|trinoids|whisper|wobble|zarvox|fred|ralph|albert|junior)\b/i;
+function isUSVoice(v){return /^en[-_]US$/i.test(v.lang||'');}
+function voiceRank(v){const n=(v.name||'').toLowerCase();return (noveltyVoice.test(n)?-100:0)+(/samantha|ava|allison|zoe|susan|nicky|joelle|noelle/.test(n)?5:0)+(v.localService?1:0);}
 function loadAmericanVoices(){
- if(!('speechSynthesis' in window)){$('voiceHint').textContent='This browser does not support speech. Quiet Mode still works.';return;}
- const voices=speechSynthesis.getVoices();
- americanVoices=voices.filter(compatibleVoice).sort((a,b)=>voiceRank(b)-voiceRank(a)||a.name.localeCompare(b.name));
+ if(!('speechSynthesis' in window)){$('voiceHint').textContent='Speech is not supported in this browser. Quiet Mode still works.';$('testVoice').disabled=true;return;}
+ const all=speechSynthesis.getVoices();
+ americanVoices=all.filter(isUSVoice).sort((a,b)=>voiceRank(b)-voiceRank(a)||a.name.localeCompare(b.name));
  const picker=$('voiceChoice'),old=picker.value;
  picker.replaceChildren();
- if(!americanVoices.length){
-  const opt=document.createElement('option');opt.value='';opt.textContent=voices.length?'Use iPhone American English default':'Loading American voices…';picker.append(opt);
-  $('testVoice').disabled=false;
-  $('voiceHint').textContent=voices.length?'Safari did not expose a compatible US voice. The game will try the iPhone’s default American English speech instead.':'Waiting for Safari to load voices. Tap Test Voice to try the iPhone default.';
-  return;
- }
+ const auto=document.createElement('option');auto.value='';auto.textContent='Automatic · iPhone English (US)';picker.append(auto);
+ for(const v of americanVoices){const option=document.createElement('option');option.value=v.voiceURI;option.textContent=v.name+' · English (US)';picker.append(option);}
+ const wanted=state.voiceURI||old||'';
+ picker.value=americanVoices.some(v=>v.voiceURI===wanted)?wanted:'';
  $('testVoice').disabled=false;
- americanVoices.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name+' · US English';picker.append(o);});
- const saved=state.voiceURI||'';
- picker.value=americanVoices.some(v=>v.voiceURI===saved)?saved:americanVoices.some(v=>v.voiceURI===old)?old:americanVoices[0].voiceURI;
- if(!picker.value)picker.selectedIndex=0;
- $('voiceHint').textContent='Compatible standard US English voices only. Premium and novelty voices are hidden because Safari may not be able to play them. Test each voice to find your favorite.';
+ $('voiceHint').textContent=americanVoices.length?'Try Test Voice. If a voice fails, select Automatic or another US voice.':'Safari is not listing US voices right now. Automatic will still attempt American English speech. You can tap Test Voice.';
 }
 $('voiceChoice').onchange=()=>{state.voiceURI=$('voiceChoice').value;save();};
 $('testVoice').onclick=()=>speak('Welcome to Clara’s Spell Garden. Let’s practice spelling together!',1);
 function speak(word,rate=1){
  if(state.quiet)return;
  if(!('speechSynthesis' in window)){$('audioStatus').textContent='Speech is unavailable. Try Quiet Mode.';return;}
- if(!americanVoices.length)loadAmericanVoices();
- const voice=americanVoices.find(v=>v.voiceURI===$('voiceChoice').value);
- // If Safari exposes no compatible named voice, request its built-in US English default.
- try{
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(word);lastUtterance=u;
-  if(voice)u.voice=voice;u.lang='en-US';u.rate=rate;u.pitch=1;u.volume=1;
-  u.onstart=()=>{$('audioStatus').textContent='🔊 Speaking with '+(voice?voice.name:'iPhone US English');};
-  u.onend=()=>{$('audioStatus').textContent='';};
-  u.onerror=e=>{if(e.error!=='canceled'&&e.error!=='interrupted')$('audioStatus').textContent='This voice could not play. Choose another standard US voice or try Quiet Mode.';};
-  speechSynthesis.speak(u);
- }catch(e){$('audioStatus').textContent='Audio unavailable. Try another US voice or Quiet Mode.';}
+ // Keep speaking inside the tap handler for iOS Safari.
+ const selected=americanVoices.find(v=>v.voiceURI===$('voiceChoice').value);
+ const say=(voice,allowFallback)=>{
+  try{
+   speechSynthesis.cancel();
+   const utterance=new SpeechSynthesisUtterance(word);lastUtterance=utterance;
+   if(voice)utterance.voice=voice;
+   utterance.lang='en-US';utterance.rate=rate;utterance.pitch=1;utterance.volume=1;
+   utterance.onstart=()=>{$('audioStatus').textContent='🔊 '+(voice?voice.name:'American English');};
+   utterance.onend=()=>{$('audioStatus').textContent='';};
+   utterance.onerror=e=>{
+    if(e.error==='canceled'||e.error==='interrupted')return;
+    $('audioStatus').textContent='This voice could not play. Choose Automatic or another voice and tap Test Voice.';
+    // Don't automatically retry after an asynchronous error: iOS may require a fresh user tap.
+   };
+   speechSynthesis.speak(utterance);
+  }catch(e){$('audioStatus').textContent='Audio unavailable. Try Automatic or Quiet Mode.';}
+ };
+ say(selected,false);
 }
-if('speechSynthesis' in window){speechSynthesis.addEventListener?.('voiceschanged',loadAmericanVoices);loadAmericanVoices();}
+if('speechSynthesis' in window){speechSynthesis.addEventListener?.('voiceschanged',loadAmericanVoices);loadAmericanVoices();document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAmericanVoices();});}
 function confetti(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const glyphs=['🌸','⭐','✨','🦋','💖','🌷'];for(let i=0;i<12;i++){const s=document.createElement('span');s.className='spark';s.textContent=glyphs[i%glyphs.length];s.style.left=(10+Math.random()*80)+'vw';s.style.top=(65+Math.random()*25)+'vh';s.style.setProperty('--dx',(Math.random()*220-110)+'px');document.body.append(s);setTimeout(()=>s.remove(),1300);}}
 const cheers=['🌸 You nailed it, Clara!','✨ Magical spelling!','🦋 Wow! You are blooming!','🌟 Superstar spelling!','💖 You did it! Keep shining!','🌷 Beautiful work!'];
 const comforts=['💗 Great try! Every mistake helps you grow.','🌱 Keep practicing — you are getting stronger!','🦋 Almost there! You can do this!','🌸 No worries! Let’s learn this one together.'];
